@@ -16,7 +16,8 @@ def decide_kube_connection_method(connection_config: dict) -> str:
     """
     if connection_config["kube_api_endpoint"] is not None:
         kube_connection_method = "api"
-    elif connection_config["kubeconfig_path"] is None or os.path.isfile(connection_config["kubeconfig_path"]) is True:
+    elif connection_config["kubeconfig_path"] is not None and \
+            os.path.isfile(connection_config["kubeconfig_path"]) is True:
         kube_connection_method = "kube_config"
     else:
         kube_connection_method = "in_cluster"
