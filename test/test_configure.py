@@ -57,29 +57,18 @@ class BaseTests(TestCase):
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
     def test_decide_kube_connection_method_api_priority(self):
-        reply = decide_kube_connection_method({
-            "kube_api_endpoint": "mykube.com",
-            "kubeconfig_path": "test/test_config/config.yaml"
-        })
+        reply = decide_kube_connection_method(kube_api_endpoint="mykube.com",
+                                              kubeconfig_path="test/test_config/config.yaml")
         self.assertEqual(reply, "api")
 
     def test_decide_kube_connection_method_kube_config_2nd_priority(self):
-        reply = decide_kube_connection_method({
-            "kube_api_endpoint": None,
-            "kubeconfig_path": "test/test_config/config.yaml"
-        })
+        reply = decide_kube_connection_method(kube_api_endpoint=None, kubeconfig_path="test/test_config/config.yaml")
         self.assertEqual(reply, "kube_config")
 
     def test_decide_kube_connection_method_in_cluster_last_priority_no_kubeconfig_set(self):
-        reply = decide_kube_connection_method({
-            "kube_api_endpoint": None,
-            "kubeconfig_path": None
-        })
+        reply = decide_kube_connection_method(kube_api_endpoint=None, kubeconfig_path=None)
         self.assertEqual(reply, "in_cluster")
 
     def test_decide_kube_connection_method_in_cluster_last_priority(self):
-        reply = decide_kube_connection_method({
-            "kube_api_endpoint": None,
-            "kubeconfig_path": "non_existing_config_path"
-        })
+        reply = decide_kube_connection_method(kube_api_endpoint=None, kubeconfig_path="non_existing_config_path")
         self.assertEqual(reply, "in_cluster")

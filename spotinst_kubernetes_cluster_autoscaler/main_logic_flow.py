@@ -8,13 +8,10 @@ def main_logic_flow():
         Will decide on the proper way to connect to the kubernetes API (via API request, as declered on kubeconfig file or
         via using in cluster configuration based on what the user pass, priority is api>kubeconfig>in_cluster
 
-        Arguments:
-            :param connection_config: the configuration dict which all configuration of possible kubernetes connections are
-            located in
-
-        Returns:
-            :return kube_connection_method: one of: "api", "kube_config" or "in_cluster"
-        """
+    Exceptions:
+        :except FileNotFoundError: will return HTTP 404 with a JSON of the stderr it catch from "terraform init" or
+        "terraform apply"
+    """
     try:
         pass
         # read configuration
