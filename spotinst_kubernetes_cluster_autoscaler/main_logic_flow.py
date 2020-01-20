@@ -4,6 +4,17 @@ from spotinst_kubernetes_cluster_autoscaler.configure import *
 
 
 def main_logic_flow():
+    """
+        Will decide on the proper way to connect to the kubernetes API (via API request, as declered on kubeconfig file or
+        via using in cluster configuration based on what the user pass, priority is api>kubeconfig>in_cluster
+
+        Arguments:
+            :param connection_config: the configuration dict which all configuration of possible kubernetes connections are
+            located in
+
+        Returns:
+            :return kube_connection_method: one of: "api", "kube_config" or "in_cluster"
+        """
     try:
         pass
         # read configuration
