@@ -56,5 +56,6 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["spotinst_token"] = parser.read_configuration_variable("spotinst_token", default_value=None)
     config["kube_connection_method"] = decide_kube_connection_method(kube_api_endpoint=config["kube_api_endpoint"],
                                                                      kubeconfig_path=config["kubeconfig_path"])
+    config["elastigroup_id"] = parser.read_configuration_variable("elastigroup_id", required=True)
 
     return config
