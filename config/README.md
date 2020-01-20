@@ -1,0 +1,2 @@
+# spotinst_kubernetes_cluster_autoscaler configuration folder
+place any config file you wish here to read it's configuration in any of the valid formats as read by [parse_it](https://github.com/naorlivne/parse_it)
