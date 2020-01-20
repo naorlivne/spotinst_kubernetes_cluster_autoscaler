@@ -5,12 +5,9 @@ from spotinst_kubernetes_cluster_autoscaler.configure import *
 
 def main_logic_flow():
     """
-        Will decide on the proper way to connect to the kubernetes API (via API request, as declered on kubeconfig file or
-        via using in cluster configuration based on what the user pass, priority is api>kubeconfig>in_cluster
-
-    Exceptions:
-        :except FileNotFoundError: will return HTTP 404 with a JSON of the stderr it catch from "terraform init" or
-        "terraform apply"
+        The main logic process, first read the configuration options, then get the current cluster CPU, Memory usage &
+        check if there are any pod deployments waiting for resources, then pass those params to the logic which decides
+        if it needs to scale up or down and then scale the spotinst elastigroup if needed before exiting
     """
     try:
         pass
