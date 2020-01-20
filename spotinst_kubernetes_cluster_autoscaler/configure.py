@@ -54,6 +54,7 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["seconds_to_check"] = parser.read_configuration_variable("seconds_to_check", default_value=10)
     config["spotinst_account"] = parser.read_configuration_variable("spotinst_account", default_value=None)
     config["spotinst_token"] = parser.read_configuration_variable("spotinst_token", default_value=None)
-    config["kube_connection_method"] = decide_kube_connection_method(config)
+    config["kube_connection_method"] = decide_kube_connection_method(kube_api_endpoint=config["kube_api_endpoint"],
+                                                                     kubeconfig_path=config["kubeconfig_path"])
 
     return config
