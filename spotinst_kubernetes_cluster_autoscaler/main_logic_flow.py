@@ -10,7 +10,7 @@ def main_logic_flow():
         if it needs to scale up or down and then scale the spotinst elastigroup if needed before exiting
     """
     try:
-        pass
+        print("Starting spotinst_kubernetes_cluster_autoscaler")
         # read configuration
         configuration = read_configurations(os.getenv("CONFIG_DIR", "config"))
         # check connection to cluster works
