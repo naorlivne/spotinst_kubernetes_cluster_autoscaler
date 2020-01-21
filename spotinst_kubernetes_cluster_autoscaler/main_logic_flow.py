@@ -18,9 +18,9 @@ def main_logic_flow():
         # check current cluster memory usage
         # check current pod deployment status
         # run logic to see if needs scaling up
-        # if needed scale up
+        # if needed check not at or over max limit then scale up
         # if not run logic to see if needed to scale down
-        # if needed scale down
+        # if needed check not at or under limit limit then scale down
     except Exception as e:
         print("failed main logic flow - exiting")
         print(e, file=sys.stderr)
