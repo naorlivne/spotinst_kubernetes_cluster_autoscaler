@@ -68,7 +68,7 @@ class SpotinstScale:
             print("spotinst API didn't accept the size increase", file=sys.stderr)
             raise Exception
 
-    def scale_up(self):
+    def scale_up(self) -> int:
         """
             Scale up the current number of nodes by 1
 
@@ -79,7 +79,7 @@ class SpotinstScale:
         if self.set_spotinst_elastigroup_size(wanted_number_of_nodes) is True:
             return wanted_number_of_nodes
 
-    def scale_down(self):
+    def scale_down(self) -> int:
         """
             Scale down the current number of nodes by 1
 
