@@ -56,7 +56,7 @@ class KubeGetScaleData:
 
     def get_cpu_usage(self):
         """
-            Get the current number of spotinst nodes
+            Get the CPU usage of the cluster
 
             Returns:
                 :return current number of nodes in the elastigroup
@@ -65,7 +65,7 @@ class KubeGetScaleData:
 
     def get_mem_usage(self):
         """
-            Get the current number of spotinst nodes
+            Get the memory usage of the cluster
 
             Returns:
                 :return current number of nodes in the elastigroup
@@ -74,7 +74,7 @@ class KubeGetScaleData:
 
     def pod_stuck_exist(self):
         """
-            Get the current number of spotinst nodes for all namespaces
+            Check if there's a pod that cant start do to not having enough resources to be placed
 
             Returns:
                 :return current number of nodes in the elastigroup
@@ -83,7 +83,7 @@ class KubeGetScaleData:
 
     def get_connected_nodes_count(self):
         """
-            Get the current number of spotinst nodes
+            Get the current number of nodes connected to the kubernetes cluster
 
             Returns:
                 :return current number of nodes in the elastigroup
