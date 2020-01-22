@@ -13,7 +13,8 @@ def main_logic_flow():
         print("Starting spotinst_kubernetes_cluster_autoscaler")
         # read configuration
         configuration = read_configurations(os.getenv("CONFIG_DIR", "config"))
-        # check connection to cluster works
+        # check current number of nodes in spotinst & the kubernetes cluster
+        # if said numbers are different then exit as the cluster is in the process of being modified/scaling/etc
         # check current cluster CPU usage
         # check current cluster memory usage
         # check current pod deployment status
