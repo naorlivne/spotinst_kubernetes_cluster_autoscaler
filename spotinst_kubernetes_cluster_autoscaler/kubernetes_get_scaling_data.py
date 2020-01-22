@@ -19,6 +19,7 @@ class KubeGetScaleData:
                :param connection_method: how to connect to the cluster, options are "api", "kube_config" or "in_cluster"
                :param api_endpoint: the API endpoint of the kubernetes cluster to work against if not connecting via a
                kubeconfig file or from inside the cluster
+               :param context_name: the name of the context inside the kubeconfig to use if "kube_config" is used
                :param token: if connecting via "api" the bearer token to auth with
                :param kubeconfig_path: if using kubeconfig the path to the kubeconfig file
 
