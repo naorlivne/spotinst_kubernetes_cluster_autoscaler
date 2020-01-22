@@ -43,7 +43,7 @@ class BaseTests(TestCase):
 
     def test_SpotinstScale_set_spotinst_elastigroup_size_raise_error_on_failure(self):
         httpretty.enable()
-        for status_code in [103, 300]:
+        for status_code in [100, 300]:
             httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP,
                                    body='{"response": {"count": 6}}', status=status_code)
             spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
