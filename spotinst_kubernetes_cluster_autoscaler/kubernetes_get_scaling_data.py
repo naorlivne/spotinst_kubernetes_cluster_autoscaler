@@ -1,6 +1,7 @@
 from kubernetes import client, config
 from typing import Optional
 import sys
+import time
 
 
 class KubeGetScaleData:
@@ -54,34 +55,51 @@ class KubeGetScaleData:
             self.v1 = self.kube_client.CoreV1Api()
             self.custom_object_api = self.kube_client.CustomObjectsApi()
 
-    def get_cpu_usage(self):
+    def get_cpu_usage(self) -> int:
         """
-            Get the CPU usage of the cluster
+            Get the CPU usage percentage of the cluster
 
             Returns:
-                :return current number of nodes in the elastigroup
+                :return current CPU usage percentage of the cluster
         """
         pass
 
-    def get_mem_usage(self):
+    def get_mem_usage(self) -> int:
         """
-            Get the memory usage of the cluster
+            Get the memory usage percentage of the cluster
 
             Returns:
-                :return current number of nodes in the elastigroup
+                :return current memory usage percentage of the cluster
         """
         pass
 
-    def pod_stuck_exist(self):
+    def get_number_of_pending_pods(self) -> int:
         """
-            Check if there's a pod that cant start do to not having enough resources to be placed
+            Get the number of pods that are stuck pending
 
             Returns:
-                :return current number of nodes in the elastigroup
+                :return current number of pods stuck pending
         """
-        pass
+        pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Pending",
+                                                       timeout_seconds=10)
+        return pod_list.items.__len__()
 
-    def get_connected_nodes_count(self):
+    def pending_pods_exist(self, seconds_to_wait_between_checks: int = 5) -> bool:
+        """
+            Check if there's a pod that cant start do to not having enough resources to be placed and only alert if
+            there are pods that are stuck waiting longer then seconds_to_wait_between_checks
+
+            Returns:
+                :return True if there are pods stuck waiting longer then seconds_to_wait_between_checks, False otherwise
+        """
+        pending_pods = False
+        if self.get_number_of_pending_pods() > 0:
+            time.sleep(seconds_to_wait_between_checks)
+            if self.get_number_of_pending_pods() > 0:
+                pending_pods = True
+        return pending_pods
+
+    def get_connected_nodes_count(self) -> int:
         """
             Get the current number of nodes connected to the kubernetes cluster
 
