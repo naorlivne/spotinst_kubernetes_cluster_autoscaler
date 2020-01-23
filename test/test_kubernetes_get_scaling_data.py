@@ -13,7 +13,8 @@ class BaseTests(TestCase):
 
     def test_KubeGetScaleData__init__in_cluster(self):
         # raising the error because this will only work when running from inside the cluster which is next to impossible
-        # to test
+        # to test in any other way so if it raises an error that says "hi i'm configured to work in a cluster but i'm
+        # not currently in one" then i'm assuming it got the in_cluster config correctly
         with self.assertRaises(kubernetes.config.config_exception.ConfigException):
             KubeGetScaleData(connection_method="in_cluster")
 
