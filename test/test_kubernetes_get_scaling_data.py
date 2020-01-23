@@ -60,3 +60,12 @@ class BaseTests(TestCase):
         self.assertFalse(kube_config.pending_pods_exist())
         httpretty.disable()
         httpretty.reset()
+
+    def test_KubeGetScaleData_get_connected_nodes_count(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
+                               body='{"items": ["test1", "test2"]}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        self.assertEqual(kube_config.get_connected_nodes_count(), 2)
+        httpretty.disable()
+        httpretty.reset()

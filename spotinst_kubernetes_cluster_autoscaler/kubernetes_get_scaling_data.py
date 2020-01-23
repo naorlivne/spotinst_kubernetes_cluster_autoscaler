@@ -106,4 +106,5 @@ class KubeGetScaleData:
             Returns:
                 :return current number of nodes in the elastigroup
         """
-        pass
+        nodes_list = self.v1.list_node()
+        return nodes_list.items.__len__()
