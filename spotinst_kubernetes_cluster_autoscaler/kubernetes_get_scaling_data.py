@@ -55,21 +55,12 @@ class KubeGetScaleData:
             self.v1 = self.kube_client.CoreV1Api()
             self.custom_object_api = self.kube_client.CustomObjectsApi()
 
-    def get_cpu_usage(self) -> int:
+    def get_cpu_and_mem_usage(self) -> int:
         """
-            Get the CPU usage percentage of the cluster
+            Get the CPU & memory usage percentage of the cluster
 
             Returns:
-                :return current CPU usage percentage of the cluster
-        """
-        pass
-
-    def get_mem_usage(self) -> int:
-        """
-            Get the memory usage percentage of the cluster
-
-            Returns:
-                :return current memory usage percentage of the cluster
+                :return current CPU & memory usage percentage of the cluster
         """
         pass
 
