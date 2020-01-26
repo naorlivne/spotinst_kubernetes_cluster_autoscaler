@@ -116,9 +116,9 @@ class KubeGetScaleData:
                     requests_memory += unit_converter(container.resources.requests['memory'])
 
         current_used_metrics = self.custom_object_api.list_cluster_custom_object('metrics.k8s.io', 'v1beta1', 'nodes')
-        for node in current_used_metrics['items']:
-            used_cpu += unit_converter(node['usage']['cpu'])
-            used_memory += unit_converter(node['usage']['memory'])
+        for metric_node in current_used_metrics['items']:
+            used_cpu += unit_converter(metric_node['usage']['cpu'])
+            used_memory += unit_converter(metric_node['usage']['memory'])
 
         max_used_requested_cpu = max([used_cpu, requested_cpu])
         max_used_requested_memory = max([used_memory, requests_memory])

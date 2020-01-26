@@ -70,10 +70,43 @@ class BaseTests(TestCase):
         httpretty.disable()
         httpretty.reset()
 
-    def test_KubeGetScaleData_get_cpu_and_mem_usage(self):
+    def test_KubeGetScaleData_get_cpu_and_mem_usage_higher_used(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
+                               body='{"items": [{"status": {"allocatable": {"cpu": "1000m","memory": "5000Mi"}}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/apis/metrics.k8s.io/v1beta1/nodes",
+                               body='{"items": [{"usage": {"cpu": "500m","memory": "1000Mi"}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Running",
+                               body='{"items": [{"name": "test", "spec": {"containers": [{"name": "test", "resources": '
+                                    '{"requests": {"cpu": "100m","memory": "100Mi"}}}]}}]}',
+                               status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        reply = kube_config.get_cpu_and_mem_usage()
-        self.assertEqual(reply, 123)
+        test_cpu_usage, test_memory_usage = kube_config.get_cpu_and_mem_usage()
+        self.assertEqual(test_cpu_usage, 50)
+        self.assertEqual(test_memory_usage, 20)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_KubeGetScaleData_get_cpu_and_mem_usage_higher_requested(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
+                               body='{"items": [{"status": {"allocatable": {"cpu": "1000m","memory": "5000Mi"}}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/apis/metrics.k8s.io/v1beta1/nodes",
+                               body='{"items": [{"usage": {"cpu": "100m","memory": "100Mi"}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Running",
+                               body='{"items": [{"name": "test", "spec": {"containers": [{"name": "test", "resources": '
+                                    '{"requests": {"cpu": "500m","memory": "1000Mi"}}}]}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        test_cpu_usage, test_memory_usage = kube_config.get_cpu_and_mem_usage()
+        self.assertEqual(test_cpu_usage, 50)
+        self.assertEqual(test_memory_usage, 20)
+        httpretty.disable()
+        httpretty.reset()
 
     def test_unit_converter_included_units(self):
         reply = unit_converter("10500m")
@@ -86,4 +119,3 @@ class BaseTests(TestCase):
     def test_unit_converter_raise_TypeError_not_included_units(self):
         with self.assertRaises(TypeError):
             unit_converter("10500Ubernonexistingunit")
-
