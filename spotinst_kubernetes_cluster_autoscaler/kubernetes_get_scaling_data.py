@@ -87,7 +87,9 @@ class KubeGetScaleData:
 
     def get_cpu_and_mem_usage(self) -> Tuple[int, int]:
         """
-            Get the CPU & memory usage percentage of the cluster
+            Get the CPU & memory usage percentage of the cluster by figuring out the highest of the requested CPU & mem
+            of all containers running in the cluster & the actually used CPU & mem then dividing that by the total CPU &
+            mem available at the kubernetes cluster
 
             Returns:
                 :return used_cpu_percentage: CPU usage percentage of the cluster
