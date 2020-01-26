@@ -69,3 +69,21 @@ class BaseTests(TestCase):
         self.assertEqual(kube_config.get_connected_nodes_count(), 2)
         httpretty.disable()
         httpretty.reset()
+
+    def test_KubeGetScaleData_get_cpu_and_mem_usage(self):
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        reply = kube_config.get_cpu_and_mem_usage()
+        self.assertEqual(reply, 123)
+
+    def test_unit_converter_included_units(self):
+        reply = unit_converter("10500m")
+        self.assertEqual(reply, 10.5)
+
+    def test_unit_converter_custom_added_units(self):
+        reply = unit_converter("1Ki")
+        self.assertEqual(reply, 1024)
+
+    def test_unit_converter_raise_TypeError_not_included_units(self):
+        with self.assertRaises(TypeError):
+            unit_converter("10500Ubernonexistingunit")
+

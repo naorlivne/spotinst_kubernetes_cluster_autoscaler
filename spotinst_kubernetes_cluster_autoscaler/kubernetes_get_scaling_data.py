@@ -1,7 +1,37 @@
 from kubernetes import client, config
-from typing import Optional
+from typing import Optional, Tuple
 import sys
 import time
+from si_prefix import si_parse
+
+
+def unit_converter(unit_added_string: str) -> float:
+    """
+        convert unit formatted strings to floating numbers without any units
+
+        Arguments:
+            :param unit_added_string: the unit added number we want to convert to be unit free
+
+        Returns::
+            :return unit_in_float: the same number but in float without the units
+
+        Raises::
+            :raise TypeError: if trying to parse an unknown unit type
+            """
+    custom_unit_ratio = {
+        "Ki": 1024,
+        "Mi": 1024 * 1024,
+        "Gi": 1024 * 1024 * 1024
+    }
+    try:
+        unit_in_float = float(si_parse(unit_added_string))
+    except AttributeError:
+        if unit_added_string[-2:] in custom_unit_ratio:
+            unit_in_float = float(unit_added_string[:-2]) * custom_unit_ratio[unit_added_string[-2:]]
+        else:
+            raise TypeError
+
+    return unit_in_float
 
 
 class KubeGetScaleData:
@@ -55,14 +85,48 @@ class KubeGetScaleData:
             self.v1 = self.kube_client.CoreV1Api()
             self.custom_object_api = self.kube_client.CustomObjectsApi()
 
-    def get_cpu_and_mem_usage(self) -> int:
+    def get_cpu_and_mem_usage(self) -> Tuple[int, int]:
         """
             Get the CPU & memory usage percentage of the cluster
 
             Returns:
-                :return current CPU & memory usage percentage of the cluster
+                :return used_cpu_percentage: CPU usage percentage of the cluster
+                :return used_memory_percentage: memory usage percentage of the cluster
         """
-        pass
+
+        allocatable_cpu = 0
+        allocatable_memory = 0
+        used_cpu = 0
+        used_memory = 0
+        requested_cpu = 0
+        requests_memory = 0
+
+        nodes_list = self.v1.list_node()
+        for node in nodes_list.items:
+            allocatable_cpu += unit_converter(node.status.allocatable['cpu'])
+            allocatable_memory += unit_converter(node.status.allocatable['memory'])
+
+        pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Running",
+                                                       timeout_seconds=10)
+        for pod in pod_list.items:
+            for container in pod.spec.containers:
+                if (container.resources.requests is not None) and ("cpu" in container.resources.requests):
+                    requested_cpu += unit_converter(container.resources.requests['cpu'])
+                if (container.resources.requests is not None) and ("memory" in container.resources.requests):
+                    requests_memory += unit_converter(container.resources.requests['memory'])
+
+        current_used_metrics = self.custom_object_api.list_cluster_custom_object('metrics.k8s.io', 'v1beta1', 'nodes')
+        for node in current_used_metrics['items']:
+            used_cpu += unit_converter(node['usage']['cpu'])
+            used_memory += unit_converter(node['usage']['memory'])
+
+        max_used_requested_cpu = max([used_cpu, requested_cpu])
+        max_used_requested_memory = max([used_memory, requests_memory])
+
+        used_cpu_percentage = int(max_used_requested_cpu / allocatable_cpu * 100)
+        used_memory_percentage = int(max_used_requested_memory / allocatable_memory * 100)
+
+        return used_cpu_percentage, used_memory_percentage
 
     def get_number_of_pending_pods(self) -> int:
         """
