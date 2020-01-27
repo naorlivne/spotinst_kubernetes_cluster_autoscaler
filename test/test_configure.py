@@ -17,7 +17,6 @@ class BaseTests(TestCase):
                 'max_cpu_usage': 80,
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
-                'spotinst_account': None,
                 'spotinst_token': None,
                 'elastigroup_id': "sig-123"
             }
@@ -40,7 +39,6 @@ class BaseTests(TestCase):
                 'max_cpu_usage': 80,
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
-                'spotinst_account': None,
                 'spotinst_token': None,
                 'elastigroup_id': "sig-123"
             }
@@ -58,8 +56,8 @@ class BaseTests(TestCase):
             'max_cpu_usage': 80,
             'min_cpu_usage': 50,
             'seconds_to_check': 777,
-            'spotinst_account': None,
-            'spotinst_token': None
+            'spotinst_token': None,
+            'elastigroup_id': "sig-123"
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
