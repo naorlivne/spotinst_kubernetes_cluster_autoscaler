@@ -35,7 +35,7 @@ You need to be able to connect to both the spotinst API (which is done with the 
 When running the autoscaler outside the cluster the simplest way is to run everything via envars, for example:
 
 ```shell script
-sudo docker run -e kube_token=my_kube_token -e kube_api_endpoint= naorlivne/spotinst_kubernetes_cluster_autoscaler
+sudo docker run -e kube_token=my_kube_token -e kube_api_endpoint=my-kube.my-domain.com -e spotinst_token=my_spoinst_token -e elastigroup_id=sig-123XXXX naorlivne/spotinst_kubernetes_cluster_autoscaler
 ```
 
 ### Inside the cluster
