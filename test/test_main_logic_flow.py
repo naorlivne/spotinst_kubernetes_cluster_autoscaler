@@ -156,3 +156,7 @@ class BaseTests(TestCase):
         self.assertIsNone(action_taken)
         httpretty.disable()
         httpretty.reset()
+
+    def test_main_logic_raise_exception(self):
+        with self.assertRaises(SystemExit):
+            main_logic_flow()
