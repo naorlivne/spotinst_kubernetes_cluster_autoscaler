@@ -30,7 +30,9 @@ def main_logic_flow():
         if kube_connection.pending_pods_exist(seconds_to_wait_between_checks=configuration["seconds_to_check"]) is True:
             pending_pods_number = kube_connection.get_number_of_pending_pods()
             print("there are " + str(pending_pods_number) + " pending pods, scaling up number of kubernetes nodes")
-            spotinst_connection.scale_up()
+            server_count = spotinst_connection.scale_up()
+            print("scaled up to " + str(server_count) + "servers")
+            action_taken = "scaled_up"
         # otherwise check the cpu & memory usage
         else:
             used_cpu_percentage, used_memory_percentage = kube_connection.get_cpu_and_mem_usage()
@@ -40,15 +42,22 @@ def main_logic_flow():
             if used_cpu_percentage >= configuration["max_cpu_usage"] or \
                     used_memory_percentage >= configuration["max_memory_usage"]:
                 print("scaling up due to high memory/cpu usage")
-                spotinst_connection.scale_up()
+                server_count = spotinst_connection.scale_up()
+                print("scaled up to " + str(server_count) + "servers")
+                action_taken = "scaled_up"
             # on low cpu/memory usage scale down, both are needed to be low to scale down
             elif used_cpu_percentage < configuration["min_cpu_usage"] and \
                     used_memory_percentage < configuration["min_memory_usage"]:
                 print("scaling down due to low memory/cpu usage")
-                spotinst_connection.scale_down()
+                server_count = spotinst_connection.scale_down()
+                print("scaled down to " + str(server_count) + "servers")
+                action_taken = "scaled_down"
             # otherwise were done here
             else:
                 print("no rescaling needed, exiting")
+                action_taken = None
+
+        return action_taken
 
     except Exception as e:
         print("failed main logic flow - exiting")

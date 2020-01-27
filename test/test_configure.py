@@ -55,7 +55,7 @@ class BaseTests(TestCase):
             'min_memory_usage': 50,
             'max_cpu_usage': 80,
             'min_cpu_usage': 50,
-            'seconds_to_check': 777,
+            'seconds_to_check': 3,
             'spotinst_token': None,
             'elastigroup_id': "sig-123"
         }
