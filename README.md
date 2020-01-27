@@ -6,6 +6,14 @@ Drone.io CI/CD unit tests & auto push status: [![Build Status](https://cloud.dro
 
 Code coverage: [![codecov](https://codecov.io/gh/naorlivne/spotinst_kubernetes_cluster_autoscaler/branch/master/graph/badge.svg)](https://codecov.io/gh/naorlivne/spotinst_kubernetes_cluster_autoscaler)
 
+# Dependencies
+
+The autoscaler requires the following:
+
+* A kubernetes cluster 
+* A spotinst group which runs the kubernetes cluster nodes
+* [metrics-server](https://github.com/kubernetes-sigs/metrics-server) installed & configured on the kubernetes cluster
+
 ## Configuration parameters
 
 Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) which means that you can configure the autoscaler by placing configuration files (of your chosen format) in the configuration folder (`config` by default, can be changed with the `CONFIG_DIR` envvar ) or by setting the UPPERCASE version of the variables below:
@@ -24,9 +32,8 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | spotinst_token     | SPOTINST_TOKEN     |                | Required, token used to connect to spotinst                                                                         |
 | elastigroup_id     | ELASTIGROUP_ID     |                | Required, the elastigroup ID of your kubernetes nodes in spotinst                                                   |
 
-## Running 
+## Running outside the cluster
 
-### Outside the cluster
 You need to be able to connect to both the spotinst API (which is done with the `spotinst_token` & `elastigroup_id` variables) & to your Kubernetes cluster API, the following can be done in one of 2 ways outside the cluster:
 
 * Using a kubeconfig file, this will require mounting the kubeconfig inside the autoscaler container and setting the `kubeconfig_path` & `kubeconfig_context` variables
@@ -38,4 +45,15 @@ When running the autoscaler outside the cluster the simplest way is to run every
 sudo docker run -e kube_token=my_kube_token -e kube_api_endpoint=my-kube.my-domain.com -e spotinst_token=my_spoinst_token -e elastigroup_id=sig-123XXXX naorlivne/spotinst_kubernetes_cluster_autoscaler
 ```
 
-### Inside the cluster
+Note that the autoscaler is designed to run as a cronjob so it will exit once finished! if you plan on running it outside the cluster in a prod env it is recommended to wrap it as a cron task
+
+## Running inside the cluster
+
+Inside the cluster running the autoscaler as a cron_job is the recommended way to go, if your cluster is configured with RBAC you will also need to grant it a service user that is allowed to read the state of the cluster.
+
+### with RBAC configured
+
+
+
+### without RBAC configured
+
