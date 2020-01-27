@@ -53,7 +53,7 @@ Inside the cluster running the autoscaler as a cron_job is the recommended way t
 
 ### with RBAC configured
 
-[This configuration](kubernetes_in_cluster_example_config/with_rbac.yaml) provides an example on how to run spotinst_kubernetes_cluster_autoscaler on a kubernetes cluster that's configured with RBAC.
+[This configuration](kubernetes_in_cluster_example_config/with_rbac.yaml) provides an example on how to run spotinst_kubernetes_cluster_autoscaler on a kubernetes cluster that's configured with RBAC as cron job every minute.
 
 You can run it with the following command:
 
@@ -63,7 +63,7 @@ kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes
 
 ### without RBAC configured
 
-[This configuration](kubernetes_in_cluster_example_config/without_rbac.yaml) provides an example on how to run spotinst_kubernetes_cluster_autoscaler on a kubernetes cluster that's configured without RBAC.
+[This configuration](kubernetes_in_cluster_example_config/without_rbac.yaml) provides an example on how to run spotinst_kubernetes_cluster_autoscaler on a kubernetes cluster that's configured without RBAC as cron job every minute.
 
 You can run it with the following command:
 

@@ -1,0 +1,28 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: spotinst_kubernetes_cluster_autoscaler
+spec:
+  schedule: "* * * * *"
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: spotinst_kubernetes_cluster_autoscaler
+            image: naorlivne/spotinst_kubernetes_cluster_autoscaler
+            env:
+            - name: SPOTINST_TOKEN
+              value: "my_super_secret_spotinst_token"
+            - name: ELASTIGROUP_ID
+              value: "sig-123XXXXXXXX"
+            resources:
+              limits:
+                cpu: 100m
+                memory: 256Mi
+              requests:
+                cpu: 100m
+                memory: 256Mi
+          restartPolicy: OnFailure
