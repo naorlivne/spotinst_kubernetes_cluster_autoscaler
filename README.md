@@ -58,7 +58,7 @@ Inside the cluster running the autoscaler as a cron_job is the recommended way t
 You can run it with the following command:
 
 ```shell script
-kubectl apply -f 
+kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes_cluster_autoscaler/master/kubernetes_in_cluster_example_config/with_rbac.yaml
 ```
 
 ### without RBAC configured
@@ -68,5 +68,5 @@ kubectl apply -f
 You can run it with the following command:
 
 ```shell script
-kubectl apply -f 
+kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes_cluster_autoscaler/master/kubernetes_in_cluster_example_config/without_rbac.yaml
 ```
