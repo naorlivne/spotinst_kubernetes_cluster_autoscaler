@@ -146,6 +146,10 @@ class KubeGetScaleData:
             Check if there's a pod that cant start do to not having enough resources to be placed and only alert if
             there are pods that are stuck waiting longer then seconds_to_wait_between_checks
 
+            Arguments:
+                :param seconds_to_wait_between_checks: the number of seconds to wait to recheck if the pods are still
+                in a pending state
+
             Returns:
                 :return True if there are pods stuck waiting longer then seconds_to_wait_between_checks, False otherwise
         """
