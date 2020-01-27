@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: spotinst_kubernetes_cluster_autoscaler
+  name: spotinst-kubernetes-cluster-autoscaler
 spec:
   schedule: "* * * * *"
   successfulJobsHistoryLimit: 1
@@ -11,7 +11,7 @@ spec:
       template:
         spec:
           containers:
-          - name: spotinst_kubernetes_cluster_autoscaler
+          - name: spotinst-kubernetes-cluster-autoscaler
             image: naorlivne/spotinst_kubernetes_cluster_autoscaler
             env:
             - name: SPOTINST_TOKEN
