@@ -5,7 +5,7 @@ from spotinst_kubernetes_cluster_autoscaler.configure import *
 class BaseTests(TestCase):
 
     def test_autoscaler_configure_sane_defaults(self):
-        with mock.patch('os.environ', {"ELASTIGROUP_ID": "sig-123"}):
+        with mock.patch('os.environ', {"ELASTIGROUP_ID": "sig-123", "SPOTINST_TOKEN": "test_token"}):
             reply = read_configurations()
             expected_reply = {
                 'kube_token': None,
@@ -17,7 +17,7 @@ class BaseTests(TestCase):
                 'max_cpu_usage': 80,
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
-                'spotinst_token': None,
+                'spotinst_token': "test_token",
                 'elastigroup_id': "sig-123"
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
@@ -27,7 +27,8 @@ class BaseTests(TestCase):
             read_configurations()
 
     def test_autoscaler_configure_read_envvar(self):
-        with mock.patch('os.environ', {"KUBE_TOKEN": "my_super_secret_token123", "ELASTIGROUP_ID": "sig-123"}):
+        with mock.patch('os.environ', {"KUBE_TOKEN": "my_super_secret_token123", "ELASTIGROUP_ID": "sig-123",
+                                       "SPOTINST_TOKEN": "test_token"}):
             reply = read_configurations()
             expected_reply = {
                 'kube_token': "my_super_secret_token123",
@@ -39,7 +40,7 @@ class BaseTests(TestCase):
                 'max_cpu_usage': 80,
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
-                'spotinst_token': None,
+                'spotinst_token': "test_token",
                 'elastigroup_id': "sig-123"
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
@@ -56,7 +57,7 @@ class BaseTests(TestCase):
             'max_cpu_usage': 80,
             'min_cpu_usage': 50,
             'seconds_to_check': 3,
-            'spotinst_token': None,
+            'spotinst_token': "test_token",
             'elastigroup_id': "sig-123"
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
