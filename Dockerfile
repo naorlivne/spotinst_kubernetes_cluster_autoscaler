@@ -12,5 +12,8 @@ RUN pip install -r /autoscaler/requirements.txt
 COPY . /autoscaler
 RUN chmod +x /autoscaler/autoscaler_runner.py
 
+# configure the default location of the config folder
+ENV CONFIG_DIR=/autoscaler/config
+
 # and running it
 CMD ["python" ,"/autoscaler/autoscaler_runner.py"]
