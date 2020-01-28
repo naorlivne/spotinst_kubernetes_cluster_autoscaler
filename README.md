@@ -53,6 +53,8 @@ Inside the cluster running the autoscaler as a cron_job is the recommended way t
 
 ### with RBAC configured
 
+When RBAC is enabled you need to configure read-only access to the kubernetes cluster & to the [metrics-server](https://github.com/kubernetes-sigs/metrics-server).
+
 [This configuration](kubernetes_in_cluster_example_config/with_rbac.yaml) provides an example on how to run spotinst_kubernetes_cluster_autoscaler on a kubernetes cluster that's configured with RBAC as cron job every minute.
 
 You can run it with the following command:
