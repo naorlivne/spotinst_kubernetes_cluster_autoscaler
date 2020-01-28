@@ -10,7 +10,7 @@ kind: ClusterRole
 metadata:
   name: spotinst-kubernetes-cluster-autoscaler-cluster-role
 rules:
-- apiGroups: [""]
+- apiGroups: ["","metrics.k8s.io"]
   resources: ["pods", "nodes"]
   verbs: ["get", "watch", "list"]
 
