@@ -24,6 +24,7 @@ def main_logic_flow():
         # create spotinst connection object
         spotinst_connection = SpotinstScale(auth_token=configuration["spotinst_token"],
                                             elastigroup=configuration["elastigroup_id"],
+                                            spotinst_account=configuration["spotinst_account"],
                                             min_nodes=configuration["min_node_count"],
                                             max_nodes=configuration["max_node_count"])
 

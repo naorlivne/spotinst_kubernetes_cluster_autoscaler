@@ -1,3 +1,4 @@
 seconds_to_check: 3
 'elastigroup_id': "sig-123"
 spotinst_token: "test_token"
+spotinst_account: "act-12345678"

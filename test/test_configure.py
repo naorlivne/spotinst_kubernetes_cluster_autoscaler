@@ -5,7 +5,8 @@ from spotinst_kubernetes_cluster_autoscaler.configure import *
 class BaseTests(TestCase):
 
     def test_autoscaler_configure_sane_defaults(self):
-        with mock.patch('os.environ', {"ELASTIGROUP_ID": "sig-123", "SPOTINST_TOKEN": "test_token"}):
+        with mock.patch('os.environ', {"ELASTIGROUP_ID": "sig-123", "SPOTINST_TOKEN": "test_token",
+                                       "SPOTINST_ACCOUNT": "act-12345678"}):
             reply = read_configurations()
             expected_reply = {
                 'kube_token': None,
@@ -20,7 +21,8 @@ class BaseTests(TestCase):
                 'spotinst_token': "test_token",
                 'elastigroup_id': "sig-123",
                 'min_node_count': 2,
-                'max_node_count': 100
+                'max_node_count': 100,
+                "spotinst_account": "act-12345678"
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -30,7 +32,7 @@ class BaseTests(TestCase):
 
     def test_autoscaler_configure_read_envvar(self):
         with mock.patch('os.environ', {"KUBE_TOKEN": "my_super_secret_token123", "ELASTIGROUP_ID": "sig-123",
-                                       "SPOTINST_TOKEN": "test_token"}):
+                                       "SPOTINST_TOKEN": "test_token", "SPOTINST_ACCOUNT": "act-12345678"}):
             reply = read_configurations()
             expected_reply = {
                 'kube_token': "my_super_secret_token123",
@@ -45,7 +47,8 @@ class BaseTests(TestCase):
                 'spotinst_token': "test_token",
                 'elastigroup_id': "sig-123",
                 'min_node_count': 2,
-                'max_node_count': 100
+                'max_node_count': 100,
+                "spotinst_account": "act-12345678"
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -64,7 +67,8 @@ class BaseTests(TestCase):
             'spotinst_token': "test_token",
             'elastigroup_id': "sig-123",
             'min_node_count': 2,
-            'max_node_count': 100
+            'max_node_count': 100,
+            "spotinst_account": "act-12345678"
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 

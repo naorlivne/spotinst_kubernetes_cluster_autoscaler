@@ -58,5 +58,6 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["elastigroup_id"] = parser.read_configuration_variable("elastigroup_id", required=True)
     config["min_node_count"] = parser.read_configuration_variable("min_node_count", default_value=2)
     config["max_node_count"] = parser.read_configuration_variable("max_node_count", default_value=100)
+    config["spotinst_account"] = parser.read_configuration_variable("spotinst_account", required=True)
 
     return config

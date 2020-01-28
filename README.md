@@ -33,6 +33,7 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | elastigroup_id     | ELASTIGROUP_ID     |                | Required, the elastigroup ID of your kubernetes nodes in spotinst                                                   |
 | min_node_count     | MIN_NODE_COUNT     | 2              | minimum number of nodes the kubernetes cluster can have                                                             |
 | max_node_count     | MAX_NODE_COUNT     | 100            | maximum number of nodes the kubernetes cluster can have                                                             |
+| spotinst_account   | SPOTINST_ACCOUNT   |                | Required, spotinst account where the elastigroup reside it                                                          |
 
 
 ## Running outside the cluster
