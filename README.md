@@ -67,7 +67,7 @@ You can run it with the following command:
 kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes_cluster_autoscaler/master/kubernetes_in_cluster_example_config/with_rbac.yaml
 ```
 
-Be aware that at minimum you will need to change the values of `SPOTINST_TOKEN` & `ELASTIGROUP_ID` envvars to your own spotinst token & elastigroup ID
+Be aware that at minimum you will need to change the values of `SPOTINST_TOKEN`, `SPOTINST_ACCOUNT` & `ELASTIGROUP_ID` envvars to your own spotinst token & elastigroup ID
 
 ### without RBAC configured
 
@@ -79,4 +79,4 @@ You can run it with the following command:
 kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes_cluster_autoscaler/master/kubernetes_in_cluster_example_config/without_rbac.yaml
 ```
 
-Be aware that at minimum you will need to change the values of `SPOTINST_TOKEN` & `ELASTIGROUP_ID` envvars to your own spotinst token & elastigroup ID
+Be aware that at minimum you will need to change the values of `SPOTINST_TOKEN`, `SPOTINST_ACCOUNT` & `ELASTIGROUP_ID` envvars to your own spotinst token & elastigroup ID

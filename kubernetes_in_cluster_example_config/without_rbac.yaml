@@ -18,6 +18,8 @@ spec:
               value: "my_super_secret_spotinst_token"
             - name: ELASTIGROUP_ID
               value: "sig-123XXXXXXXX"
+            - name: SPOTINST_ACCOUNT
+              value: "acc-123XXXXXXXX"
             resources:
               limits:
                 cpu: 100m
