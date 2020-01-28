@@ -18,7 +18,9 @@ class BaseTests(TestCase):
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
                 'spotinst_token': "test_token",
-                'elastigroup_id': "sig-123"
+                'elastigroup_id': "sig-123",
+                'min_node_count': 2,
+                'max_node_count': 100
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -41,7 +43,9 @@ class BaseTests(TestCase):
                 'min_cpu_usage': 50,
                 'seconds_to_check': 10,
                 'spotinst_token': "test_token",
-                'elastigroup_id': "sig-123"
+                'elastigroup_id': "sig-123",
+                'min_node_count': 2,
+                'max_node_count': 100
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -58,7 +62,9 @@ class BaseTests(TestCase):
             'min_cpu_usage': 50,
             'seconds_to_check': 3,
             'spotinst_token': "test_token",
-            'elastigroup_id': "sig-123"
+            'elastigroup_id': "sig-123",
+            'min_node_count': 2,
+            'max_node_count': 100
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 

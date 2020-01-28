@@ -8,7 +8,7 @@ class SpotinstScale:
        cluster & sending scale up/down requests to said group
     """
 
-    def __init__(self, auth_token: str, elastigroup: str):
+    def __init__(self, auth_token: str, elastigroup: str, min_nodes: int, max_nodes: int):
         """
            Init the class with the basic data needed to use the spotinst API that is always common between the different
            calls needed
@@ -16,6 +16,8 @@ class SpotinstScale:
            Arguments:
                :param auth_token: the spotinst api token
                :param elastigroup: the elastigroup ID which the nodes are part of
+               :param min_nodes: the minimum number of nodes wanted in the cluster elastigroup
+               :param max_nodes: the maximum number of nodes wanted in the cluster elastigroup
         """
         self.elastigroup = elastigroup
         self.url = "https://api.spotinst.io/aws/ec2/group/" + self.elastigroup + "/instanceHealthiness"
@@ -24,6 +26,8 @@ class SpotinstScale:
             'content-type': "application/json",
             'cache-control': "no-cache"
         }
+        self.min_nodes = min_nodes
+        self.max_nodes = max_nodes
 
     def get_spotinst_instances(self) -> int:
         """
@@ -57,7 +61,7 @@ class SpotinstScale:
         url = "https://api.spotinst.io/aws/ec2/group/" + self.elastigroup
 
         payload = "{\"group\": { \"capacity\": { \"target\": " + str(wanted_nodes_number) + ", \"minimum\": " \
-                  + str(wanted_nodes_number) + ", \"maximum\":" + str(wanted_nodes_number) + "}}}"
+                  + str(self.min_nodes) + ", \"maximum\":" + str(self.max_nodes) + "}}}"
         headers = self.headers
 
         response = requests.request("PUT", url, data=payload, headers=headers)

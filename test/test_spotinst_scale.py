@@ -14,7 +14,8 @@ class BaseTests(TestCase):
             'cache-control': 'no-cache',
             'content-type': 'application/json'
         }
-        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                            max_nodes=100)
         self.assertEqual(spotinst_connection.elastigroup, TEST_ELASTIGROUP)
         self.assertEqual(spotinst_connection.url, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                          "/instanceHealthiness")
@@ -24,7 +25,8 @@ class BaseTests(TestCase):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                                "/instanceHealthiness", body='{"response": {"count": 5}}')
-        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                            max_nodes=100)
         response = spotinst_connection.get_spotinst_instances()
         httpretty.disable()
         httpretty.reset()
@@ -35,7 +37,8 @@ class BaseTests(TestCase):
         for status_code in range(200, 208):
             httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP,
                                    body='{"response": {"count": 6}}', status=status_code)
-            spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+            spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                                max_nodes=100)
             response = spotinst_connection.set_spotinst_elastigroup_size(6)
             self.assertTrue(response)
         httpretty.disable()
@@ -46,7 +49,8 @@ class BaseTests(TestCase):
         for status_code in [100, 300]:
             httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP,
                                    body='{"response": {"count": 6}}', status=status_code)
-            spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+            spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                                max_nodes=100)
             with self.assertRaises(Exception):
                 spotinst_connection.set_spotinst_elastigroup_size(6)
         httpretty.disable()
@@ -58,7 +62,8 @@ class BaseTests(TestCase):
                                "/instanceHealthiness", body='{"response": {"count": 5}}')
         httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP,
                                body='{"response": {"count": 6}}', status=200)
-        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                            max_nodes=100)
         response = spotinst_connection.scale_up()
         self.assertEqual(response, 6)
         httpretty.disable()
@@ -70,7 +75,8 @@ class BaseTests(TestCase):
                                "/instanceHealthiness", body='{"response": {"count": 5}}')
         httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP,
                                body='{"response": {"count": 6}}', status=200)
-        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP)
+        spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
+                                            max_nodes=100)
         response = spotinst_connection.scale_down()
         self.assertEqual(response, 4)
         httpretty.disable()

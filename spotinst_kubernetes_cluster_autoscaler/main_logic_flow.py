@@ -23,7 +23,9 @@ def main_logic_flow():
 
         # create spotinst connection object
         spotinst_connection = SpotinstScale(auth_token=configuration["spotinst_token"],
-                                            elastigroup=configuration["elastigroup_id"])
+                                            elastigroup=configuration["elastigroup_id"],
+                                            min_nodes=configuration["min_node_count"],
+                                            max_nodes=configuration["max_node_count"])
 
         # check if there are any stuck pods and if there are scale the cluster up
         print("checking if there are any stuck pods")

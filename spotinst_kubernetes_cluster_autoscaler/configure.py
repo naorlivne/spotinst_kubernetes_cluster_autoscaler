@@ -56,5 +56,7 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["kube_connection_method"] = decide_kube_connection_method(kube_api_endpoint=config["kube_api_endpoint"],
                                                                      kubeconfig_path=config["kubeconfig_path"])
     config["elastigroup_id"] = parser.read_configuration_variable("elastigroup_id", required=True)
+    config["min_node_count"] = parser.read_configuration_variable("min_node_count", default_value=2)
+    config["max_node_count"] = parser.read_configuration_variable("max_node_count", default_value=100)
 
     return config
