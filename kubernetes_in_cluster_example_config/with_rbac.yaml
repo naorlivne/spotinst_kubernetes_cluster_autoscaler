@@ -27,6 +27,7 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: spotinst-kubernetes-cluster-autoscaler-service-account
+  namespace: default
 
 ---
 
