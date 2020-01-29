@@ -51,7 +51,7 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["min_memory_usage"] = parser.read_configuration_variable("min_memory_usage", default_value=50)
     config["max_cpu_usage"] = parser.read_configuration_variable("max_cpu_usage", default_value=80)
     config["min_cpu_usage"] = parser.read_configuration_variable("min_cpu_usage", default_value=50)
-    config["seconds_to_check"] = parser.read_configuration_variable("seconds_to_check", default_value=10)
+    config["seconds_to_check"] = parser.read_configuration_variable("seconds_to_check", default_value=30)
     config["spotinst_token"] = parser.read_configuration_variable("spotinst_token", required=True)
     config["kube_connection_method"] = decide_kube_connection_method(kube_api_endpoint=config["kube_api_endpoint"],
                                                                      kubeconfig_path=config["kubeconfig_path"])

@@ -28,7 +28,7 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | min_memory_usage   | MIN_MEMORY_USAGE   | 50             | Minimum memory usage above which the cluster will be autoscaled, in percent (1 to 100)                              |
 | max_cpu_usage      | MAX_CPU_USAGE      | 80             | Maximum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
 | min_cpu_usage      | MIN_CPU_USAGE      | 50             | Minimum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
-| seconds_to_check   | SECONDS_TO_CHECK   | 10             | time to wait before double checking of pending containers before scaling up if they are still in a pending state    |
+| seconds_to_check   | SECONDS_TO_CHECK   | 30             | time to wait before double checking of pending containers before scaling up if they are still in a pending state    |
 | spotinst_token     | SPOTINST_TOKEN     |                | Required, token used to connect to spotinst                                                                         |
 | elastigroup_id     | ELASTIGROUP_ID     |                | Required, the elastigroup ID of your kubernetes nodes in spotinst                                                   |
 | min_node_count     | MIN_NODE_COUNT     | 2              | minimum number of nodes the kubernetes cluster can have                                                             |
