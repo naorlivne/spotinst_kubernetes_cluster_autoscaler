@@ -5,7 +5,7 @@ codecov==2.0.15
 configobj==5.0.6
 coverage==5.0.3
 dpath==2.0.1
-google-auth==1.11.1
+google-auth==1.11.2
 httpretty==0.9.7
 idna==2.9
 kubernetes==10.0.1
