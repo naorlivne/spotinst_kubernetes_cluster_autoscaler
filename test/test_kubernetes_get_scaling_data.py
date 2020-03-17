@@ -21,14 +21,13 @@ class BaseTests(TestCase):
     def test_KubeGetScaleData__init__kube_config(self):
         kube_config = KubeGetScaleData(connection_method="kube_config", context_name="queen-anne-context",
                                        kubeconfig_path=str(Path(__file__).parent) + "/test_config/test_kube_config")
-        self.assertIsInstance(kube_config.v1, kubernetes.client.apis.CoreV1Api)
-        self.assertIsInstance(kube_config.custom_object_api, kubernetes.client.apis.custom_objects_api.CustomObjectsApi)
+        self.assertIsInstance(kube_config.v1, kubernetes.client.api.CoreV1Api)
+        self.assertIsInstance(kube_config.custom_object_api, kubernetes.client.api.custom_objects_api.CustomObjectsApi)
 
     def test_KubeGetScaleData__init__api(self):
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
         self.assertIsInstance(kube_config.kube_client, kubernetes.client.api_client.ApiClient)
-        self.assertIsInstance(kube_config.v1, kubernetes.client.apis.CoreV1Api)
-        self.assertIsInstance(kube_config.custom_object_api, kubernetes.client.apis.custom_objects_api.CustomObjectsApi)
+        self.assertIsInstance(kube_config.v1, kubernetes.client.api.CoreV1Api)
 
     def test_KubeGetScaleData__init__raise_valueerror_on_wrong_connection_method(self):
         with self.assertRaises(ValueError):
