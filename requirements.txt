@@ -13,7 +13,7 @@ oauthlib==3.1.0
 parse-it==3.4.0
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
-pyhcl==0.4.1
+pyhcl==0.4.2
 python-dateutil==2.8.1
 python-dotenv==0.12.0
 PyYAML==5.3.1
