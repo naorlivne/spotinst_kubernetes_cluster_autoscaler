@@ -23,6 +23,6 @@ rsa==4.6
 si-prefix==1.2.2
 six==1.15.0
 toml==0.10.1
-urllib3==1.25.10
+urllib3==1.25.11
 websocket-client==0.57.0
 xmltodict==0.12.0
