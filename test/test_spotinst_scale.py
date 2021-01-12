@@ -64,12 +64,12 @@ class BaseTests(TestCase):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                                "/instanceHealthiness" + "?accountId=" + TEST_ACCOUNT_ID,
-                               body='{"response": {"count": 5}}')
+                               body='{"response": {"count": 4}}')
         httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                                "?accountId=" + TEST_ACCOUNT_ID, body='{"response": {"count": 6}}', status=200)
         spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
                                             max_nodes=100, spotinst_account=TEST_ACCOUNT_ID)
-        response = spotinst_connection.scale_up()
+        response = spotinst_connection.scale_up(2)
         self.assertEqual(response, 6)
         httpretty.disable()
         httpretty.reset()
@@ -78,12 +78,12 @@ class BaseTests(TestCase):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                                "/instanceHealthiness" + "?accountId=" + TEST_ACCOUNT_ID,
-                               body='{"response": {"count": 5}}')
+                               body='{"response": {"count": 6}}')
         httpretty.register_uri(httpretty.PUT, "https://api.spotinst.io/aws/ec2/group/" + TEST_ELASTIGROUP +
                                "?accountId=" + TEST_ACCOUNT_ID, body='{"response": {"count": 6}}', status=200)
         spotinst_connection = SpotinstScale(auth_token=TEST_TOKEN, elastigroup=TEST_ELASTIGROUP, min_nodes=2,
                                             max_nodes=100, spotinst_account=TEST_ACCOUNT_ID)
-        response = spotinst_connection.scale_down()
+        response = spotinst_connection.scale_down(2)
         self.assertEqual(response, 4)
         httpretty.disable()
         httpretty.reset()

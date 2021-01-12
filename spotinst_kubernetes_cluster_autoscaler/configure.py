@@ -59,5 +59,7 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["min_node_count"] = parser.read_configuration_variable("min_node_count", default_value=2)
     config["max_node_count"] = parser.read_configuration_variable("max_node_count", default_value=100)
     config["spotinst_account"] = parser.read_configuration_variable("spotinst_account", required=True)
+    config["scale_up_count"] = parser.read_configuration_variable("scale_up_count", default_value=1)
+    config["scale_down_count"] = parser.read_configuration_variable("scale_down_count", default_value=1)
 
     return config

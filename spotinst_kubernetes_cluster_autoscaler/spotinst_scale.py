@@ -76,24 +76,30 @@ class SpotinstScale:
             print("spotinst API didn't accept the size increase", file=sys.stderr)
             raise Exception
 
-    def scale_up(self) -> int:
+    def scale_up(self, scale_count: int = 1) -> int:
         """
-            Scale up the current number of nodes by 1
+            Scale up the current number of nodes by scale_count
+
+            Arguments:
+                :param scale_count: the number of nodes you want to add to the cluster
 
             Returns:
                 :return wanted_number_of_nodes: the new number of nodes in the elastigroup
         """
-        wanted_number_of_nodes = self.get_spotinst_instances() + 1
+        wanted_number_of_nodes = self.get_spotinst_instances() + scale_count
         if self.set_spotinst_elastigroup_size(wanted_number_of_nodes) is True:
             return wanted_number_of_nodes
 
-    def scale_down(self) -> int:
+    def scale_down(self, scale_count: int = 1) -> int:
         """
-            Scale down the current number of nodes by 1
+            Scale down the current number of nodes by scale_count
+
+            Arguments:
+                :param scale_count: the number of nodes you want to add to the cluster
 
             Returns:
                 :return wanted_number_of_nodes: the new number of nodes in the elastigroup
         """
-        wanted_number_of_nodes = self.get_spotinst_instances() - 1
+        wanted_number_of_nodes = self.get_spotinst_instances() - scale_count
         if self.set_spotinst_elastigroup_size(wanted_number_of_nodes) is True:
             return wanted_number_of_nodes
