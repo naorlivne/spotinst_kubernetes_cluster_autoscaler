@@ -35,7 +35,7 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | max_node_count     | MAX_NODE_COUNT     | 100            | maximum number of nodes the kubernetes cluster can have                                                             |
 | spotinst_account   | SPOTINST_ACCOUNT   |                | Required, spotinst account where the elastigroup reside it                                                          |
 | scale_up_count     | SCALE_UP_COUNT     | 1              | the number of servers to be added each step up event                                                                |
-| scale_down_count   | SCALE_down_COUNT   | 1              | the number of servers to be removed each step up event                                                              |
+| scale_down_count   | SCALE_DOWN_COUNT   | 1              | the number of servers to be removed each step up event                                                              |
 
 
 ## Running outside the cluster
