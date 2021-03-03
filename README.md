@@ -36,7 +36,8 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | spotinst_account   | SPOTINST_ACCOUNT   |                | Required, spotinst account where the elastigroup reside it                                                          |
 | scale_up_count     | SCALE_UP_COUNT     | 1              | the number of servers to be added each step up event                                                                |
 | scale_down_count   | SCALE_DOWN_COUNT   | 1              | the number of servers to be removed each step up event                                                              |
-
+| scale_up_active    | SCALE_UP_ACTIVE    | True           | If true will scale up (given internal logic deems it needed)                                                        |
+| scale_down_active  | SCALE_DOWN_ACTIVE  | True           | If true will scale down (given internal logic deems it needed)                                                      |
 
 ## Running outside the cluster
 

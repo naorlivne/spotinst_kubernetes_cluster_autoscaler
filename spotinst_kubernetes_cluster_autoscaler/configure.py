@@ -61,5 +61,7 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["spotinst_account"] = parser.read_configuration_variable("spotinst_account", required=True)
     config["scale_up_count"] = parser.read_configuration_variable("scale_up_count", default_value=1)
     config["scale_down_count"] = parser.read_configuration_variable("scale_down_count", default_value=1)
+    config["scale_up_active"] = parser.read_configuration_variable("scale_up_active", default_value=True)
+    config["scale_down_active"] = parser.read_configuration_variable("scale_down_active", default_value=True)
 
     return config

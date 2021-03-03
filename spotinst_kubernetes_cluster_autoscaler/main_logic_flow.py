@@ -30,7 +30,8 @@ def main_logic_flow():
 
         # check if there are any stuck pods and if there are scale the cluster up
         print("checking if there are any stuck pods")
-        if kube_connection.pending_pods_exist(seconds_to_wait_between_checks=configuration["seconds_to_check"]) is True:
+        if kube_connection.pending_pods_exist(seconds_to_wait_between_checks=configuration["seconds_to_check"]) is \
+                True and configuration["scale_up_active"] is True:
             pending_pods_number = kube_connection.get_number_of_pending_pods()
             print("there are " + str(pending_pods_number) + " pending pods, scaling up number of kubernetes nodes")
             server_count = spotinst_connection.scale_up(configuration["scale_up_count"])
@@ -42,15 +43,17 @@ def main_logic_flow():
             print("current cluster CPU usage is " + str(used_cpu_percentage) + "%")
             print("current cluster memory usage is " + str(used_memory_percentage) + "%")
             # on high cpu/memory usage scale up, it's enough to have just one of them be high to scale up
-            if used_cpu_percentage >= configuration["max_cpu_usage"] or \
-                    used_memory_percentage >= configuration["max_memory_usage"]:
+            if configuration["scale_up_active"] is True and (used_cpu_percentage >= configuration["max_cpu_usage"] or
+                                                             used_memory_percentage >=
+                                                             configuration["max_memory_usage"]):
                 print("scaling up due to high memory/cpu usage")
                 server_count = spotinst_connection.scale_up(configuration["scale_up_count"])
                 print("scaled up to " + str(server_count) + "servers")
                 action_taken = "scaled_up"
             # on low cpu/memory usage scale down, both are needed to be low to scale down
             elif used_cpu_percentage < configuration["min_cpu_usage"] and \
-                    used_memory_percentage < configuration["min_memory_usage"]:
+                    used_memory_percentage < configuration["min_memory_usage"] and configuration["scale_down_active"] \
+                    is True:
                 print("scaling down due to low memory/cpu usage")
                 server_count = spotinst_connection.scale_down(configuration["scale_down_count"])
                 print("scaled down to " + str(server_count) + "servers")

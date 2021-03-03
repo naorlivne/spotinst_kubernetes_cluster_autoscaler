@@ -24,7 +24,9 @@ class BaseTests(TestCase):
                 'max_node_count': 100,
                 "spotinst_account": "act-12345678",
                 "scale_up_count": 1,
-                "scale_down_count": 1
+                "scale_down_count": 1,
+                "scale_up_active": True,
+                "scale_down_active": True
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -50,7 +52,9 @@ class BaseTests(TestCase):
                 'elastigroup_id': "sig-123",
                 'min_node_count': 2,
                 'max_node_count': 100,
-                "spotinst_account": "act-12345678"
+                "spotinst_account": "act-12345678",
+                "scale_up_active": True,
+                "scale_down_active": True
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -70,7 +74,9 @@ class BaseTests(TestCase):
             'elastigroup_id': "sig-123",
             'min_node_count': 2,
             'max_node_count': 100,
-            "spotinst_account": "act-12345678"
+            "spotinst_account": "act-12345678",
+            "scale_up_active": True,
+            "scale_down_active": True
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 

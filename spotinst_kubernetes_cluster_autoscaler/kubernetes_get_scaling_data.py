@@ -137,9 +137,9 @@ class KubeGetScaleData:
             Returns:
                 :return current number of pods stuck pending
         """
-        pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Pending",
-                                                       timeout_seconds=10)
-        return pod_list.items.__len__()
+        pending_pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Pending",
+                                                               timeout_seconds=10)
+        return pending_pod_list.items.__len__()
 
     def pending_pods_exist(self, seconds_to_wait_between_checks: int = 5) -> bool:
         """
