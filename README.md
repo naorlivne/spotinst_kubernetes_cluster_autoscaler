@@ -20,24 +20,26 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 
 | value              | envvar             | default value  | notes                                                                                                               |
 |--------------------|--------------------|----------------|---------------------------------------------------------------------------------------------------------------------|
-| kube_token         | KUBE_TOKEN         | None           | Kubernetes token used to connect to the cluster, not needed if running in cluster or using kubeconfig file          |
-| kube_api_endpoint  | KUBE_API_ENDPOINT  | None           | Kubernetes API endpoint used to connect to the cluster, not needed if running in cluster or using kubeconfig file   |
-| kubeconfig_path    | KUBECONFIG_PATH    | ~/.kube/config | Path to kubeconfig file used to connect to the cluster, not needed if running in cluster or using token auth        |
-| kubeconfig_context | KUBECONFIG_CONTEXT | None           | Context of the kubeconfig file used to connect to the cluster, not needed if running in cluster or using token auth |
-| max_memory_usage   | MAX_MEMORY_USAGE   | 80             | Maximum memory usage above which the cluster will be autoscaled, in percent (1 to 100)                              |
-| min_memory_usage   | MIN_MEMORY_USAGE   | 50             | Minimum memory usage above which the cluster will be autoscaled, in percent (1 to 100)                              |
-| max_cpu_usage      | MAX_CPU_USAGE      | 80             | Maximum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
-| min_cpu_usage      | MIN_CPU_USAGE      | 50             | Minimum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
-| seconds_to_check   | SECONDS_TO_CHECK   | 30             | time to wait before double checking of pending containers before scaling up if they are still in a pending state    |
-| spotinst_token     | SPOTINST_TOKEN     |                | Required, token used to connect to spotinst                                                                         |
-| elastigroup_id     | ELASTIGROUP_ID     |                | Required, the elastigroup ID of your kubernetes nodes in spotinst                                                   |
-| min_node_count     | MIN_NODE_COUNT     | 2              | minimum number of nodes the kubernetes cluster can have                                                             |
-| max_node_count     | MAX_NODE_COUNT     | 100            | maximum number of nodes the kubernetes cluster can have                                                             |
-| spotinst_account   | SPOTINST_ACCOUNT   |                | Required, spotinst account where the elastigroup reside it                                                          |
-| scale_up_count     | SCALE_UP_COUNT     | 1              | the number of servers to be added each step up event                                                                |
-| scale_down_count   | SCALE_DOWN_COUNT   | 1              | the number of servers to be removed each step up event                                                              |
-| scale_up_active    | SCALE_UP_ACTIVE    | True           | If true will scale up (given internal logic deems it needed)                                                        |
-| scale_down_active  | SCALE_DOWN_ACTIVE  | True           | If true will scale down (given internal logic deems it needed)                                                      |
+| kube_token             | KUBE_TOKEN             | None           | Kubernetes token used to connect to the cluster, not needed if running in cluster or using kubeconfig file          |
+| kube_api_endpoint      | KUBE_API_ENDPOINT      | None           | Kubernetes API endpoint used to connect to the cluster, not needed if running in cluster or using kubeconfig file   |
+| kubeconfig_path        | KUBECONFIG_PATH        | ~/.kube/config | Path to kubeconfig file used to connect to the cluster, not needed if running in cluster or using token auth        |
+| kubeconfig_context     | KUBECONFIG_CONTEX    T | None           | Context of the kubeconfig file used to connect to the cluster, not needed if running in cluster or using token auth |
+| max_memory_usage       | MAX_MEMORY_USAGE       | 80             | Maximum memory usage above which the cluster will be autoscaled, in percent (1 to 100)                              |
+| min_memory_usage       | MIN_MEMORY_USAGE       | 50             | Minimum memory usage above which the cluster will be autoscaled, in percent (1 to 100)                              |
+| max_cpu_usage          | MAX_CPU_USAGE          | 80             | Maximum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
+| min_cpu_usage          | MIN_CPU_USAGE          | 50             | Minimum CPU usage above which the cluster will be autoscaled, in percent (1 to 100)                                 |
+| seconds_to_check       | SECONDS_TO_CHECK       | 30             | time to wait before double checking of pending containers before scaling up if they are still in a pending state    |
+| spotinst_token         | SPOTINST_TOKEN         |                | Required, token used to connect to spotinst                                                                         |
+| elastigroup_id         | ELASTIGROUP_ID         |                | Required, the elastigroup ID of your kubernetes nodes in spotinst                                                   |
+| min_node_count         | MIN_NODE_COUNT         | 2              | minimum number of nodes the kubernetes cluster can have                                                             |
+| max_node_count         | MAX_NODE_COUNT         | 100            | maximum number of nodes the kubernetes cluster can have                                                             |
+| spotinst_account       | SPOTINST_ACCOUNT       |                | Required, spotinst account where the elastigroup reside it                                                          |
+| scale_up_count         | SCALE_UP_COUNT         | 1              | the number of servers to be added each step up event                                                                |
+| scale_down_count       | SCALE_DOWN_COUNT       | 1              | the number of servers to be removed each step up event                                                              |
+| scale_up_active        | SCALE_UP_ACTIVE        | True           | If true will scale up (given internal logic deems it needed)                                                        |
+| scale_down_active      | SCALE_DOWN_ACTIVE      | True           | If true will scale down (given internal logic deems it needed)                                                      |
+| scale_on_pending_pods  | SCALE_ON_PENDING_PODS  | True           | If true will scale up if there are pods stuck pending                                                               |
+
 
 ## Running outside the cluster
 

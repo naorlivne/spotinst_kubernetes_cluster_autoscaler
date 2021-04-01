@@ -26,7 +26,8 @@ class BaseTests(TestCase):
                 "scale_up_count": 1,
                 "scale_down_count": 1,
                 "scale_up_active": True,
-                "scale_down_active": True
+                "scale_down_active": True,
+                "scale_on_pending_pods": True
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -54,7 +55,8 @@ class BaseTests(TestCase):
                 'max_node_count': 100,
                 "spotinst_account": "act-12345678",
                 "scale_up_active": True,
-                "scale_down_active": True
+                "scale_down_active": True,
+                "scale_on_pending_pods": True
             }
             self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 
@@ -76,7 +78,8 @@ class BaseTests(TestCase):
             'max_node_count': 100,
             "spotinst_account": "act-12345678",
             "scale_up_active": True,
-            "scale_down_active": True
+            "scale_down_active": True,
+            "scale_on_pending_pods": True
         }
         self.assertTrue(set(expected_reply.items()).issubset(reply.items()))
 

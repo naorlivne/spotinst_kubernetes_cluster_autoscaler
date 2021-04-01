@@ -63,5 +63,6 @@ def read_configurations(config_folder: str = "config") -> dict:
     config["scale_down_count"] = parser.read_configuration_variable("scale_down_count", default_value=1)
     config["scale_up_active"] = parser.read_configuration_variable("scale_up_active", default_value=True)
     config["scale_down_active"] = parser.read_configuration_variable("scale_down_active", default_value=True)
+    config["scale_on_pending_pods"] = parser.read_configuration_variable("scale_on_pending_pods", default_value=True)
 
     return config

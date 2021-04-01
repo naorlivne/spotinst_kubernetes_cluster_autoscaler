@@ -218,3 +218,31 @@ class BaseTests(TestCase):
         self.assertIsNone(action_taken)
         httpretty.disable()
         httpretty.reset()
+
+    def test_main_logic_flow_scale_up_stuck_pods_and_scale_on_pending_pods_is_false(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"name": "test12", "spec": {"containers": [{"name": "test12", '
+                                    '"resources": {"requests": {"cpu": "100m","memory": "100Mi"}}}]}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
+                               body='{"items": [{"status": {"allocatable": {"cpu": "1000m","memory": "5000Mi"}}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/apis/metrics.k8s.io/v1beta1/nodes",
+                               body='{"items": [{"usage": {"cpu": "500m","memory": "2500Mi"}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Running",
+                               body='{"items": [{"name": "test", "spec": {"containers": [{"name": "test", "resources": '
+                                    '{"requests": {"cpu": "100m","memory": "100Mi"}}}]}}]}',
+                               status=200)
+        with mock.patch('os.environ', {
+            "CONFIG_DIR": TEST_CONFIG_DIR,
+            "SPOTINST_TOKEN": TEST_TOKEN,
+            "KUBE_TOKEN": kube_test_token,
+            "KUBE_API_ENDPOINT": kube_test_api,
+            "SCALE_ON_PENDING_PODS": "false"
+        }):
+            action_taken = main_logic_flow()
+        self.assertIsNone(action_taken)
+        httpretty.disable()
+        httpretty.reset()
