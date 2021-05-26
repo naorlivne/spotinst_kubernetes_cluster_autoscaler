@@ -124,7 +124,7 @@ class BaseTests(TestCase):
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
                                body='{"items": []}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertFalse(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
@@ -138,7 +138,7 @@ class BaseTests(TestCase):
                                     '"reason": "Unschedulable", '
                                     '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}]}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertTrue(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
@@ -152,7 +152,7 @@ class BaseTests(TestCase):
                                     '"reason": "Unschedulable", '
                                     '"message": "0/13 nodes are available: 13 Insufficient memory."}]}}]}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertTrue(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
@@ -166,7 +166,7 @@ class BaseTests(TestCase):
                                     '"reason": "Unschedulable", '
                                     '"message": "0/13 nodes are available: 13 Insufficient gpu."}]}}]}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertTrue(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
@@ -178,15 +178,15 @@ class BaseTests(TestCase):
                                     '"status": "False", "lastProbeTime": null, '
                                     '"lastTransitionTime": "2021-05-26T08:47:02Z", '
                                     '"reason": "Unschedulable", '
-                                    '"message": "some crazy other reason a pod can not be scheduled."}], '
+                                    '"message": "crazy reason a pod can not be scheduled with nodes"}]}},'
                                     '{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
                                     '"status": "False", "lastProbeTime": null, '
                                     '"lastTransitionTime": "2021-05-26T08:47:02Z", '
                                     '"reason": "Unschedulable", '
-                                    '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}}]}',
+                                    '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}]}',
                                status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertTrue(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
@@ -200,7 +200,7 @@ class BaseTests(TestCase):
                                     '"reason": "Unschedulable", '
                                     '"message": "crazy reason a pod can not be scheduled with nodes"}]}}]}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
-        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
         self.assertFalse(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()

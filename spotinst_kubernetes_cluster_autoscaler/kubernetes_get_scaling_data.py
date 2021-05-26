@@ -170,7 +170,6 @@ class KubeGetScaleData:
         nodes_list = self.v1.list_node()
         return nodes_list.items.__len__()
 
-    @property
     def check_pods_stuck_do_to_insufficient_resource(self) -> bool:
         """
             Check if there are any pending pods due to lack of gpu/cpu/memory for them to be placed
