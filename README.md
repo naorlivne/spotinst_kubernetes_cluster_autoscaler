@@ -38,7 +38,7 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | scale_down_count       | SCALE_DOWN_COUNT       | 1              | the number of servers to be removed each step up event                                                              |
 | scale_up_active        | SCALE_UP_ACTIVE        | True           | If true will scale up (given internal logic deems it needed)                                                        |
 | scale_down_active      | SCALE_DOWN_ACTIVE      | True           | If true will scale down (given internal logic deems it needed)                                                      |
-| scale_on_pending_pods  | SCALE_ON_PENDING_PODS  | True           | If true will scale up if there are pods stuck pending                                                               |
+| scale_on_pending_pods  | SCALE_ON_PENDING_PODS  | True           | If true will scale up if there are pods stuck pending due to lack of resources                                                              |
 
 
 ## Running outside the cluster

@@ -118,3 +118,89 @@ class BaseTests(TestCase):
     def test_unit_converter_raise_TypeError_not_included_units(self):
         with self.assertRaises(TypeError):
             unit_converter("10500Ubernonexistingunit")
+
+    def test_check_pods_stuck_do_to_insufficient_resource_no_pods(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": []}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertFalse(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_single_pending_pods_with_insufficient_cpu(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}]}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_single_pending_pods_with_insufficient_memory(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient memory."}]}}]}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_single_pending_pods_with_insufficient_gpu(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient gpu."}]}}]}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_mixed_pending_pods_with_insufficient_resources(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "some crazy other reason a pod can not be scheduled."}], '
+                                    '{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_pending_pods_due_to_other_reasons(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "crazy reason a pod can not be scheduled with nodes"}]}}]}', status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource
+        self.assertFalse(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()

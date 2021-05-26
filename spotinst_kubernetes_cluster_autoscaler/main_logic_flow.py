@@ -30,6 +30,7 @@ def main_logic_flow():
 
         # check if there are any stuck pods and if there are scale the cluster up
         print("checking if there are any stuck pods")
+        # TODO - add check_pods_stuck_do_to_insufficient_resource logic
         if kube_connection.pending_pods_exist(seconds_to_wait_between_checks=configuration["seconds_to_check"]) is \
                 True and configuration["scale_up_active"] is True and configuration["scale_on_pending_pods"] is True:
             pending_pods_number = kube_connection.get_number_of_pending_pods()

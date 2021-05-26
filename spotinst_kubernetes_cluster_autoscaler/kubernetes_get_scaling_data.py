@@ -169,3 +169,25 @@ class KubeGetScaleData:
         """
         nodes_list = self.v1.list_node()
         return nodes_list.items.__len__()
+
+    @property
+    def check_pods_stuck_do_to_insufficient_resource(self) -> bool:
+        """
+            Check if there are any pending pods due to lack of gpu/cpu/memory for them to be placed
+
+            Returns:
+                :return True if there are pods pending due to lack of gpu/cpu/mem, False otherwise
+        """
+
+        limited_resources_pending_pod = False
+        pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Pending",
+                                                       timeout_seconds=15)
+        for pending_pod in pod_list.items:
+            if pending_pod.status.conditions[0].reason == "Unschedulable":
+                if "nodes" in str(pending_pod.status.conditions[0].message):
+                    if ("cpu" in pending_pod.status.conditions[0].message) or \
+                            ("memory" in pending_pod.status.conditions[0].message) or \
+                            ("gpu" in pending_pod.status.conditions[0].message):
+                        limited_resources_pending_pod = True
+                        break
+        return limited_resources_pending_pod
