@@ -15,7 +15,11 @@ class BaseTests(TestCase):
     def test_main_logic_flow_scale_up_stuck_pods(self):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
-                               body='{"items": ["test1", "test2"]}', status=200)
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient memory."}]}}]}', status=200)
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
                                body='{"items": [{"status": {"allocatable": {"cpu": "1000m","memory": "5000Mi"}}}]}',
                                status=200)
