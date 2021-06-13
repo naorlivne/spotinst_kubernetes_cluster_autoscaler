@@ -171,6 +171,21 @@ class BaseTests(TestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def test_check_pods_stuck_do_to_insufficient_resource_single_pending_pods_with_insufficient_disk(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient ephemeral-storage."}]}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource()
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
     def test_check_pods_stuck_do_to_insufficient_resource_mixed_pending_pods_with_insufficient_resources(self):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",

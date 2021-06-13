@@ -186,7 +186,8 @@ class KubeGetScaleData:
                 if "nodes" in str(pending_pod.status.conditions[0].message):
                     if ("cpu" in pending_pod.status.conditions[0].message) or \
                             ("memory" in pending_pod.status.conditions[0].message) or \
-                            ("gpu" in pending_pod.status.conditions[0].message):
+                            ("gpu" in pending_pod.status.conditions[0].message) or \
+                            ("ephemeral-storage" in pending_pod.status.conditions[0].message):
                         limited_resources_pending_pod = True
                         break
         return limited_resources_pending_pod
