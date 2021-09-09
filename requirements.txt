@@ -4,7 +4,7 @@ chardet==4.0.0
 codecov==2.1.12
 configobj==5.0.6
 coverage==5.5
-dpath==2.0.1
+dpath==2.0.3
 google-auth==2.0.2
 httpretty==1.1.4
 idna==3.2
