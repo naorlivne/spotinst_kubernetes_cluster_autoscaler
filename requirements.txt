@@ -8,7 +8,7 @@ dpath==2.0.5
 google-auth==2.3.0
 httpretty==1.1.4
 idna==3.3
-kubernetes==18.20.0
+kubernetes==19.15.0
 oauthlib==3.1.1
 parse-it==2021.10.18.11.14
 pyasn1==0.4.8
