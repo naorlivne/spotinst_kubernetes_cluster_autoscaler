@@ -107,6 +107,28 @@ class BaseTests(TestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def test_KubeGetScaleData_get_cpu_and_mem_usage_node_selector_used(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
+                               body='{"items": [{"metadata": {"name": "ip-1-2-3-4.ec2.internal"},'
+                                    '"status": {"allocatable": {"cpu": "1000m","memory": "5000Mi"}}},'
+                                    '{"metadata": {"name": "ip-1-2-3-5.ec2.internal"},'
+                                    '"status": {"allocatable": {"cpu": "2000m","memory": "10000Mi"}}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/apis/metrics.k8s.io/v1beta1/nodes",
+                               body='{"items": [{"usage": {"cpu": "100m","memory": "100Mi"}}]}',
+                               status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Running",
+                               body='{"items": [{"name": "test", "spec": {"containers": [{"name": "test", "resources": '
+                                    '{"requests": {"cpu": "1000m","memory": "2000Mi"}}}]}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        test_cpu_usage, test_memory_usage = kube_config.get_cpu_and_mem_usage(node_selector_label="instance_type=test")
+        self.assertEqual(test_cpu_usage, 66)
+        self.assertEqual(test_memory_usage, 26)
+        httpretty.disable()
+        httpretty.reset()
+
     def test_unit_converter_included_units(self):
         reply = unit_converter("10500m")
         self.assertEqual(reply, 10.5)

@@ -111,9 +111,19 @@ class KubeGetScaleData:
             allocatable_cpu += unit_converter(node.status.allocatable['cpu'])
             allocatable_memory += unit_converter(node.status.allocatable['memory'])
 
-        pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Running",
-                                                       timeout_seconds=10)
-        for pod in pod_list.items:
+        if node_selector_label is None:
+            pod_list = self.v1.list_pod_for_all_namespaces(watch=False, field_selector="status.phase=Running",
+                                                           timeout_seconds=10)
+            pod_list_items = pod_list.items
+        else:
+            pod_list_items = []
+            for node in nodes_list.items:
+                pod_list = self.v1.list_pod_for_all_namespaces(watch=False, timeout_seconds=10,
+                                                               field_selector="status.phase=Running,spec.nodeName=" +
+                                                                              str(node.metadata.name))
+                pod_list_items += pod_list.items
+
+        for pod in pod_list_items:
             for container in pod.spec.containers:
                 if (container.resources.requests is not None) and ("cpu" in container.resources.requests):
                     requested_cpu += unit_converter(container.resources.requests['cpu'])
