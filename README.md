@@ -39,6 +39,7 @@ Configuring is done using [parse_it](https://github.com/naorlivne/parse_it) whic
 | scale_up_active        | SCALE_UP_ACTIVE        | True           | If true will scale up (given internal logic deems it needed)                                                        |
 | scale_down_active      | SCALE_DOWN_ACTIVE      | True           | If true will scale down (given internal logic deems it needed)                                                      |
 | scale_on_pending_pods  | SCALE_ON_PENDING_PODS  | True           | If true will scale up if there are pods stuck pending due to lack of resources (cpu, memory, gpu, ephemeral-storage)|
+| node_selector_label    | NODE_SELECTOR_LABEL    | None           | If you want to have multiple "node groups" in the same cluster each scaled individually configure this with a node label in the format of "key=value" that matches the node group you want this autoscaler to scale only on, defaults to None so catches all nodes in the cluster|
 
 
 ## Running outside the cluster

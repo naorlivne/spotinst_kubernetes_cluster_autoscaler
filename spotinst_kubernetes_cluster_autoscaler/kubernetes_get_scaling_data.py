@@ -85,12 +85,15 @@ class KubeGetScaleData:
             self.v1 = self.kube_client.CoreV1Api()
             self.custom_object_api = self.kube_client.CustomObjectsApi()
 
-    def get_cpu_and_mem_usage(self) -> Tuple[int, int]:
+    def get_cpu_and_mem_usage(self, node_selector_label: Optional[str] = None) -> Tuple[int, int]:
         """
             Get the CPU & memory usage percentage of the cluster by figuring out the highest of the requested CPU & mem
             of all containers running in the cluster & the actually used CPU & mem then dividing that by the total CPU &
             mem available at the kubernetes cluster
 
+            Arguments:
+               :param node_selector_label: Optional label to use to filter the nodes to get the usage from only a subset
+               of nodes that matches that label, defaults to all nodes, should be a string in the format of "key=value"
             Returns:
                 :return used_cpu_percentage: CPU usage percentage of the cluster
                 :return used_memory_percentage: memory usage percentage of the cluster
@@ -103,7 +106,7 @@ class KubeGetScaleData:
         requested_cpu = 0
         requests_memory = 0
 
-        nodes_list = self.v1.list_node()
+        nodes_list = self.v1.list_node(label_selector=node_selector_label)
         for node in nodes_list.items:
             allocatable_cpu += unit_converter(node.status.allocatable['cpu'])
             allocatable_memory += unit_converter(node.status.allocatable['memory'])
