@@ -88,8 +88,9 @@ class KubeGetScaleData:
     def get_cpu_and_mem_usage(self, node_selector_label: Optional[str] = None) -> Tuple[int, int]:
         """
             Get the CPU & memory usage percentage of the cluster by figuring out the highest of the requested CPU & mem
-            of all containers running in the cluster & the actually used CPU & mem then dividing that by the total CPU &
-            mem available at the kubernetes cluster
+            of all containers running in the cluster (or only a portion of the cluster that matches the
+            "node_selector_label"& the actually used CPU & mem then dividing that by the total CPU & mem available at
+            the kubernetes cluster
 
             Arguments:
                :param node_selector_label: Optional label to use to filter the nodes to get the usage from only a subset
