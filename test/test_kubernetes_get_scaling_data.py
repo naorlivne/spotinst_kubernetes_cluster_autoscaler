@@ -62,6 +62,16 @@ class BaseTests(TestCase):
 
     def test_KubeGetScaleData_get_connected_nodes_count(self):
         httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes?labelSelector=key2=value2",
+                               body='{"items": [{"metadata": {"labels": {"key1": "value1", "key2": "value2"}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        self.assertEqual(kube_config.check_node_group_labels(), {"key1": "value1", "key2": "value2"})
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_KubeGetScaleData_check_node_group_labels(self):
+        httpretty.enable()
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/nodes",
                                body='{"items": ["test1", "test2"]}', status=200)
         kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)

@@ -184,6 +184,22 @@ class KubeGetScaleData:
         nodes_list = self.v1.list_node()
         return nodes_list.items.__len__()
 
+    def check_node_group_labels(self, node_selector_label: str = None) -> dict:
+        """
+            Check what labels are in the "node group", this is done by taking the first server with a matching
+            node_selector_label and seeing what labels are on it with the logic behind it being that all nodes in the
+            node group will have the same "static" labels and you wouldn't assign pods to nodes based on dynamic labels
+            anyway
+
+            Arguments:
+                :param node_selector_label: the number of seconds to wait to recheck if the pods are still
+
+            Returns:
+                :return a dict of all labels that the node has
+        """
+        chosen_node = self.v1.list_node(watch=False, timeout_seconds=15, limit=1, label_selector=node_selector_label)
+        return chosen_node.items[0].metadata.labels
+
     def check_pods_stuck_do_to_insufficient_resource(self) -> bool:
         """
             Check if there are any pending pods due to lack of gpu/cpu/memory for them to be placed

@@ -86,3 +86,12 @@ kubectl apply -f https://raw.githubusercontent.com/naorlivne/spotinst_kubernetes
 ```
 
 Be aware that at minimum you will need to change the values of `SPOTINST_TOKEN`, `SPOTINST_ACCOUNT` & `ELASTIGROUP_ID` envvars to your own spotinst token & elastigroup ID
+
+## Limitations
+
+if you're using `node_selector_label` the following limitations apply:
+
+* You can only use `nodeSelector` or `node affinity` on a pod, not both on the same pod
+* You can't use `AND` in `node affinity`
+* `nodeSelector` can only have 1 key:value pair
+* You don't assign pods to nodes with `nodeName`
