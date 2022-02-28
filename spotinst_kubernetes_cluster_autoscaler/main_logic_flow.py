@@ -40,7 +40,8 @@ def main_logic_flow():
             action_taken = "scaled_up"
         # otherwise check the cpu & memory usage
         else:
-            used_cpu_percentage, used_memory_percentage = kube_connection.get_cpu_and_mem_usage()
+            used_cpu_percentage, used_memory_percentage = kube_connection.get_cpu_and_mem_usage(
+                node_selector_label=configuration["node_selector_label"])
             print("current cluster CPU usage is " + str(used_cpu_percentage) + "%")
             print("current cluster memory usage is " + str(used_memory_percentage) + "%")
             # on high cpu/memory usage scale up, it's enough to have just one of them be high to scale up
