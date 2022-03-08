@@ -34,6 +34,30 @@ def unit_converter(unit_added_string: str) -> float:
     return unit_in_float
 
 
+def check_pod_node_affinity(pod) -> dict:
+    """
+        Check what node affinity & nodeselector is required for the pod to run on, note this is only required per
+        run and not preferred and that it will prioritize nodeselector over node affinity in the response and will
+        only use the first label (sorry no complex affinity support)
+
+        Arguments:
+            :param pod: the pod object to check the affinity of
+
+        Returns:
+            :return a dict of the label key:value the pods has a required/nodeselector affinity to
+    """
+    if pod.spec.node_selector != {}:
+        response = pod.spec.node_selector
+    elif pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0] \
+            .node_selector_terms.match_expressions != {}:
+        response = {
+            pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0].node_selector_terms.match_expressions.key: pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0].node_selector_terms.match_expressions.values[0]
+        }
+    else:
+        response = {}
+    return response
+
+
 class KubeGetScaleData:
     """
        This class does everything related to kubernetes, this includes figuring out the current number of nodes that
@@ -41,7 +65,7 @@ class KubeGetScaleData:
        memory & CPU resource usage
     """
 
-    def __init__(self, connection_method: str,  api_endpoint: str = Optional[str], context_name: Optional[str] = None,
+    def __init__(self, connection_method: str, api_endpoint: str = Optional[str], context_name: Optional[str] = None,
                  token: Optional[str] = None, kubeconfig_path: Optional[str] = None):
         """
            Init the kubernetes connection while auto figure out the best connection auth method
