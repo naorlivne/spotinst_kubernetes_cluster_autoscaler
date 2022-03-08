@@ -33,7 +33,8 @@ def main_logic_flow():
         if kube_connection.pending_pods_exist(seconds_to_wait_between_checks=configuration["seconds_to_check"]) is \
                 True and configuration["scale_up_active"] is True and configuration["scale_on_pending_pods"] is True:
             pending_pods_number = kube_connection.get_number_of_pending_pods()
-            if kube_connection.check_pods_stuck_do_to_insufficient_resource() is True:
+            if kube_connection.check_pods_stuck_do_to_insufficient_resource(
+                    node_selector_label=configuration["node_selector_label"]) is True:
                 print("there are " + str(pending_pods_number) + " pending pods, scaling up number of kubernetes nodes")
                 server_count = spotinst_connection.scale_up(configuration["scale_up_count"])
                 print("scaled up to " + str(server_count) + "servers")

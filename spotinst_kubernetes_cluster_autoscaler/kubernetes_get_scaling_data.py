@@ -216,17 +216,21 @@ class KubeGetScaleData:
             anyway
 
             Arguments:
-                :param node_selector_label: the number of seconds to wait to recheck if the pods are still
-
+                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a subset
+                of nodes that matches that label, defaults to all nodes, should be a string in the format of "key=value"
             Returns:
                 :return a dict of all labels that the node has
         """
         chosen_node = self.v1.list_node(watch=False, timeout_seconds=15, limit=1, label_selector=node_selector_label)
         return chosen_node.items[0].metadata.labels
 
-    def check_pods_stuck_do_to_insufficient_resource(self) -> bool:
+    def check_pods_stuck_do_to_insufficient_resource(self, node_selector_label: str = None) -> bool:
         """
             Check if there are any pending pods due to lack of gpu/cpu/memory for them to be placed
+
+            Arguments:
+                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a subset
+                of nodes that matches that label, defaults to all nodes, should be a string in the format of "key=value"
 
             Returns:
                 :return True if there are pods pending due to lack of gpu/cpu/mem, False otherwise
@@ -242,6 +246,13 @@ class KubeGetScaleData:
                             ("memory" in pending_pod.status.conditions[0].message) or \
                             ("gpu" in pending_pod.status.conditions[0].message) or \
                             ("ephemeral-storage" in pending_pod.status.conditions[0].message):
-                        limited_resources_pending_pod = True
+                        if node_selector_label is None:
+                            limited_resources_pending_pod = True
+                        else:
+                            temp_node_selector_label = node_selector_label.split("=")
+                            if check_pod_node_affinity(pending_pod) == {
+                                temp_node_selector_label[0]: temp_node_selector_label[1]
+                            }:
+                                limited_resources_pending_pod = True
                         break
         return limited_resources_pending_pod
