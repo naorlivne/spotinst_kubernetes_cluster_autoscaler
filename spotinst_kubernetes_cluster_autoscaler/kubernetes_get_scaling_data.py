@@ -254,10 +254,8 @@ class KubeGetScaleData:
                         if node_selector_label is None:
                             limited_resources_pending_pod = True
                         else:
-                            temp_node_selector_label = node_selector_label.split("=")
-                            if check_pod_node_affinity(pending_pod) == {
-                                temp_node_selector_label[0]: temp_node_selector_label[1]
-                            } or check_pod_node_affinity(pending_pod) == {}:
+                            if check_pod_node_affinity(pending_pod) == {} or check_pod_node_affinity(pending_pod) in \
+                                    self.check_node_group_labels(node_selector_label):
                                 limited_resources_pending_pod = True
                         break
         return limited_resources_pending_pod
