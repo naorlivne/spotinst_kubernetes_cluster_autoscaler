@@ -49,12 +49,13 @@ def check_pod_node_affinity(pod) -> dict:
     try:
         if pod.spec.node_selector != {} and pod.spec.affinity.node_affinity is None:
             response = pod.spec.node_selector
-        elif pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0] != {}:
-            response = {
-                pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0].key: pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0].values[0]
-            }
         else:
-            response = {}
+            response = {
+                pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.
+                node_selector_terms[0].match_expressions[0].key: pod.spec.affinity.node_affinity.
+                required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0].
+                values[0]
+            }
     except AttributeError:
         response = {}
     return response
@@ -218,8 +219,9 @@ class KubeGetScaleData:
             anyway
 
             Arguments:
-                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a subset
-                of nodes that matches that label, defaults to all nodes, should be a string in the format of "key=value"
+                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a
+                subset of nodes that matches that label, defaults to all nodes, should be a string in the format of
+                "key=value"
             Returns:
                 :return a dict of all labels that the node has
         """
@@ -231,8 +233,9 @@ class KubeGetScaleData:
             Check if there are any pending pods due to lack of gpu/cpu/memory for them to be placed
 
             Arguments:
-                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a subset
-                of nodes that matches that label, defaults to all nodes, should be a string in the format of "key=value"
+                :param node_selector_label: optional label to use to filter the nodes to get the usage from only a
+                subset of nodes that matches that label, defaults to all nodes, should be a string in the format of
+                "key=value"
 
             Returns:
                 :return True if there are pods pending due to lack of gpu/cpu/mem, False otherwise
