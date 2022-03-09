@@ -251,3 +251,42 @@ class BaseTests(TestCase):
         self.assertFalse(insufficient_resource_pods)
         httpretty.disable()
         httpretty.reset()
+
+    def test_check_pod_node_affinity_node_selector(self):
+        with open("test/test_responses/eks_node_selector_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods",
+                               body=data, status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        pod_list = kube_config.v1.list_pod_for_all_namespaces(watch=False, timeout_seconds=15)
+        response = check_pod_node_affinity(pod_list.items[0])
+        self.assertDictEqual(response, {'failure-domain.beta.kubernetes.io/zone': 'us-east-1b'})
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pod_node_affinity_empty(self):
+        with open("test/test_responses/eks_node_selector_empty_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods",
+                               body=data, status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        pod_list = kube_config.v1.list_pod_for_all_namespaces(watch=False, timeout_seconds=15)
+        response = check_pod_node_affinity(pod_list.items[0])
+        self.assertDictEqual(response, {})
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pod_node_affinity_node_affinity(self):
+        with open("test/test_responses/eks_node_affinity_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods",
+                               body=data, status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        pod_list = kube_config.v1.list_pod_for_all_namespaces(watch=False, timeout_seconds=15)
+        response = check_pod_node_affinity(pod_list.items[0])
+        self.assertDictEqual(response, {'kubernetes.io/e2e-az-name': 'e2e-az1'})
+        httpretty.disable()
+        httpretty.reset()

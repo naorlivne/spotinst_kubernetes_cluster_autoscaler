@@ -46,14 +46,16 @@ def check_pod_node_affinity(pod) -> dict:
         Returns:
             :return a dict of the label key:value the pods has a required/nodeselector affinity to
     """
-    if pod.spec.node_selector != {}:
-        response = pod.spec.node_selector
-    elif pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0] \
-            .node_selector_terms.match_expressions != {}:
-        response = {
-            pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0].node_selector_terms.match_expressions.key: pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution[0].node_selector_terms.match_expressions.values[0]
-        }
-    else:
+    try:
+        if pod.spec.node_selector != {} and pod.spec.affinity.node_affinity is None:
+            response = pod.spec.node_selector
+        elif pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0] != {}:
+            response = {
+                pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0].key: pod.spec.affinity.node_affinity.required_during_scheduling_ignored_during_execution.node_selector_terms[0].match_expressions[0].values[0]
+            }
+        else:
+            response = {}
+    except AttributeError:
         response = {}
     return response
 
@@ -252,7 +254,7 @@ class KubeGetScaleData:
                             temp_node_selector_label = node_selector_label.split("=")
                             if check_pod_node_affinity(pending_pod) == {
                                 temp_node_selector_label[0]: temp_node_selector_label[1]
-                            }:
+                            } or check_pod_node_affinity(pending_pod) == {}:
                                 limited_resources_pending_pod = True
                         break
         return limited_resources_pending_pod
