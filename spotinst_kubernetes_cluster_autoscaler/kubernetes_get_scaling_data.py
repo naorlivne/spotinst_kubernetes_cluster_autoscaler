@@ -250,12 +250,16 @@ class KubeGetScaleData:
                     if ("cpu" in pending_pod.status.conditions[0].message) or \
                             ("memory" in pending_pod.status.conditions[0].message) or \
                             ("gpu" in pending_pod.status.conditions[0].message) or \
-                            ("ephemeral-storage" in pending_pod.status.conditions[0].message):
+                            ("ephemeral-storage" in pending_pod.status.conditions[0].message) or \
+                            ("node affinity/selector" in pending_pod.status.conditions[0].message):
                         if node_selector_label is None:
                             limited_resources_pending_pod = True
                         else:
-                            if check_pod_node_affinity(pending_pod) == {} or check_pod_node_affinity(pending_pod) in \
-                                    self.check_node_group_labels(node_selector_label):
+                            if check_pod_node_affinity(pending_pod) == {} or \
+                                    check_pod_node_affinity(pending_pod).items() <= \
+                                    self.check_node_group_labels(node_selector_label).items() or \
+                                    check_pod_node_affinity(pending_pod).items() <= \
+                                    self.check_node_group_labels(node_selector_label).items():
                                 limited_resources_pending_pod = True
                         break
         return limited_resources_pending_pod

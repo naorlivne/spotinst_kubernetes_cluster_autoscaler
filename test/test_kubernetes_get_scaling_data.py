@@ -238,6 +238,110 @@ class BaseTests(TestCase):
         httpretty.disable()
         httpretty.reset()
 
+    def test_check_pods_stuck_do_to_insufficient_resource_node_group_no_pod_affinity(self):
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending?"
+                                                              "labelSelector=test_key=test_value",
+                               body='{"items": [{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "crazy reason a pod can not be scheduled with nodes"}]}},'
+                                    '{"status": {"phase": "Pending","conditions": [{"type": "PodScheduled",'
+                                    '"status": "False", "lastProbeTime": null, '
+                                    '"lastTransitionTime": "2021-05-26T08:47:02Z", '
+                                    '"reason": "Unschedulable", '
+                                    '"message": "0/13 nodes are available: 13 Insufficient cpu."}]}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource(
+            node_selector_label="test_key=test_value")
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_node_group_node_selector_affinity(self):
+        httpretty.enable()
+        with open("test/test_responses/eks_node_affinity_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending?"
+                                                              "labelSelector=kubernetes.io/e2e-az-name=e2e-az1",
+                               body=data, status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api +
+                               "/api/v1/nodes?labelSelector=kubernetes.io/e2e-az-name=e2e-az1",
+                               body='{"items": [{"metadata": {"labels": {"kubernetes.io/e2e-az-name": '
+                                    '"e2e-az1", "key2": "value2"}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource(
+            node_selector_label="kubernetes.io/e2e-az-name=e2e-az1")
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_node_group_node_selector_node_selector(self):
+        httpretty.enable()
+        with open("test/test_responses/eks_node_selector_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending?"
+                                                              "labelSelector=failure-domain.beta.kubernetes.io/zone"
+                                                              "=us-east-1b",
+                               body=data, status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api +
+                               "/api/v1/nodes?labelSelector=failure-domain.beta.kubernetes.io/zone=us-east-1b",
+                               body='{"items": [{"metadata": {"labels": {"failure-domain.beta.kubernetes.io/zone": '
+                                    '"us-east-1b", "key2": "value2"}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource(
+            node_selector_label="failure-domain.beta.kubernetes.io/zone=us-east-1b")
+        self.assertTrue(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_node_group_node_selector_wrong_node_selector(self):
+        httpretty.enable()
+        with open("test/test_responses/eks_node_selector_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending?"
+                                                              "labelSelector=failure-domain.beta.kubernetes.io/zone"
+                                                              "=us-east-1b",
+                               body=data, status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api +
+                               "/api/v1/nodes?labelSelector=failure-domain.beta.kubernetes.io/zone=us-east-1b",
+                               body='{"items": [{"metadata": {"labels": {"failure-domain.beta.kubernetes.io/zone": '
+                                    '"us-east-1z", "key2": "value2"}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource(
+            node_selector_label="failure-domain.beta.kubernetes.io/zone=us-east-1z")
+        self.assertFalse(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
+    def test_check_pods_stuck_do_to_insufficient_resource_node_group_node_selector_wrong_affinity(self):
+        httpretty.enable()
+        with open("test/test_responses/eks_node_affinity_response.json", "r") as myfile:
+            data = myfile.read().replace('\n', '')
+        httpretty.enable()
+        httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending?"
+                                                              "labelSelector=kubernetes.io/e2e-az-name=e2e-az1",
+                               body=data, status=200)
+        httpretty.register_uri(httpretty.GET, kube_test_api +
+                               "/api/v1/nodes?labelSelector=kubernetes.io/e2e-az-name=wrong-az",
+                               body='{"items": [{"metadata": {"labels": {"kubernetes.io/e2e-az-name": "wrong-az",'
+                                    ' "key2": "value2"}}}]}',
+                               status=200)
+        kube_config = KubeGetScaleData(connection_method="api", token=kube_test_token, api_endpoint=kube_test_api)
+        insufficient_resource_pods = kube_config.check_pods_stuck_do_to_insufficient_resource(
+            node_selector_label="kubernetes.io/e2e-az-name=wrong-az")
+        self.assertFalse(insufficient_resource_pods)
+        httpretty.disable()
+        httpretty.reset()
+
     def test_check_pods_stuck_do_to_insufficient_resource_pending_pods_due_to_other_reasons(self):
         httpretty.enable()
         httpretty.register_uri(httpretty.GET, kube_test_api + "/api/v1/pods?fieldSelector=status.phase=Pending",

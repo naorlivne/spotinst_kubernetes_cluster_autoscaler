@@ -398,32 +398,12 @@
                 "phase": "Running",
                 "conditions": [
                     {
-                        "type": "Initialized",
-                        "status": "True",
-                        "lastProbeTime": null,
-                        "lastTransitionTime": "2022-03-09T08:57:43Z"
-                    },
-                    {
-                        "type": "Ready",
-                        "status": "False",
-                        "lastProbeTime": null,
-                        "lastTransitionTime": "2022-03-09T08:57:43Z",
-                        "reason": "ContainersNotReady",
-                        "message": "containers with unready status: [nginx]"
-                    },
-                    {
-                        "type": "ContainersReady",
-                        "status": "False",
-                        "lastProbeTime": null,
-                        "lastTransitionTime": "2022-03-09T08:57:43Z",
-                        "reason": "ContainersNotReady",
-                        "message": "containers with unready status: [nginx]"
-                    },
-                    {
                         "type": "PodScheduled",
-                        "status": "True",
+                        "status": "False",
                         "lastProbeTime": null,
-                        "lastTransitionTime": "2022-03-09T08:57:43Z"
+                        "lastTransitionTime": "2022-03-09T09:03:22Z",
+                        "reason": "Unschedulable",
+                        "message": "0/45 nodes are available: 45 node(s) didn't match Pod's node affinity/selector."
                     }
                 ],
                 "hostIP": "172.27.150.120",
