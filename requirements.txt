@@ -10,7 +10,7 @@ httpretty==1.1.4
 idna==3.3
 kubernetes==24.2.0
 oauthlib==3.2.0
-parse-it==2022.8.7.7.46
+parse-it==2022.8.9.7.15
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
 pyhcl==0.4.4
