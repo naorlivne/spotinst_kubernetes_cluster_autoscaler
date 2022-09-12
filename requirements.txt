@@ -9,7 +9,7 @@ google-auth==2.11.0
 httpretty==1.1.4
 idna==3.3
 kubernetes==24.2.0
-oauthlib==3.2.0
+oauthlib==3.2.1
 parse-it==2022.9.7.13.38
 pyasn1==0.4.8
 pyasn1-modules==0.2.8
