@@ -7,7 +7,7 @@ coverage==6.4.4
 dpath==2.0.6
 google-auth==2.11.0
 httpretty==1.1.4
-idna==3.3
+idna==3.4
 kubernetes==24.2.0
 oauthlib==3.2.1
 parse-it==2022.9.11.11.49
