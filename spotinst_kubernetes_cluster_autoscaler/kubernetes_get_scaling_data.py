@@ -58,6 +58,8 @@ def check_pod_node_affinity(pod) -> dict:
             }
     except AttributeError:
         response = {}
+    except TypeError:
+        response = {}
     return response
 
 
