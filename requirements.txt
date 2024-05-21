@@ -16,7 +16,7 @@ pyhcl==0.4.5
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 PyYAML==6.0.1
-requests==2.31.0
+requests==2.32.1
 requests-oauthlib==2.0.0
 rsa==4.9
 si-prefix==1.2.2
