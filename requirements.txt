@@ -2,7 +2,7 @@ cachetools==5.5.0
 certifi==2024.8.30
 chardet==5.2.0
 configobj==5.0.9
-coverage==7.6.2
+coverage==7.6.3
 dpath==2.2.0
 google-auth==2.35.0
 httpretty==1.1.4
