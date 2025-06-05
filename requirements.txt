@@ -4,7 +4,7 @@ chardet==5.2.0
 configobj==5.0.9
 coverage==7.6.12
 dpath==2.2.0
-google-auth==2.38.0
+google-auth==2.40.3
 httpretty==1.1.4
 idna==3.10
 kubernetes==32.0.1
